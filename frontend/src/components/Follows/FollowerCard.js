@@ -1,0 +1,53 @@
+import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
+import AvatarOrNameBox from '../atoms/AvatarOrNameBox'
+import { useDispatch } from 'react-redux'
+import axios from 'axios'
+import { setUserFollowers } from '../../redux/features/authSlice'
+
+const FollowerCard = ({profile}) => {
+    const [isRemoved, setIsRemoved] = useState(false);
+	const dispatch = useDispatch();
+
+	const removeFollower = async(e) => {
+		e.stopPropagation();  //prevent click event pass to the parent
+        e.preventDefault();
+        try{
+            const response = await axios.patch(`user/followers/remove/${profile?._id}`);
+            if(response.data.success) {
+                dispatch( setUserFollowers({ followers: [...response.data.followers] }) );
+				setIsRemoved(true)
+            }
+        } catch(error) {
+            if(error.name === 'AxiosError') console.log('error:', error.response.data.message);
+            else console.log('error:', error.message);
+        }
+	}
+
+	if(isRemoved) {
+		return
+	}
+
+    return (
+		<div key={profile?._id}>
+			<Link to={`/profile/${profile?._id}`}>
+				<div className='sectionWrapper !py-[12px] !px-[16px] cursor-pointer transition-colors ease-in hover:bg-[rgb(0,0,0,0.03)]'>
+					<div className='section-left'>
+						<AvatarOrNameBox avatarUrl={profile?.imageUrl?.url} userId={profile?._id} />
+					</div>
+					<div className='section-right flex justify-between items-center'>
+						<div>
+							<AvatarOrNameBox username={profile?.username} userId={profile?._id} />
+							<p className='text-[14px] text-mernLightGray line-clamp-1'>{profile?.bio}</p>
+						</div>
+						<button onClick={(e) => removeFollower(e)} className='btn-secondary hover:text-mernDarkGray w-fit'>
+							移除粉丝
+						</button>
+					</div>
+				</div>
+			</Link>
+		</div>
+    )
+}
+
+export default FollowerCard
