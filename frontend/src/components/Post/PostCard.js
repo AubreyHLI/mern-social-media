@@ -8,7 +8,7 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import SmsOutlinedIcon from '@mui/icons-material/SmsOutlined';
 import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
-import Moment from 'react-moment';
+import dayjs, { calendarFormat } from '../../helpers/dayjsHelper';
 import TooltipBox from '../atoms/TooltipBox';
 import LikedBtn from '../atoms/LikedBtn';
 import CollectedBtn from '../atoms/CollectedBtn';
@@ -73,7 +73,7 @@ const PostCard = ({post, isPage, navToProfile=true }) => {
 						type: 'likePost',
 						targetPost: {
 							id: post?._id,
-							text: post?.postText,
+							text: post?.postText?.slice(0,30),
 							thumbnail: post?.postPicture?.thumbnail,
 						},
 					});
@@ -96,13 +96,11 @@ const PostCard = ({post, isPage, navToProfile=true }) => {
             if(error.name === 'AxiosError') console.log('error:', error.response.data.message);
             else console.log('error:', error.message);
         }
-    }
-
-	
+    }	
 
 	return (
 	<>
-		<div onClick={handleClickPost} className={`sectionWrapper borderBottom ${isPage ? '' : 'transition-color ease-out cursor-pointer hover:bg-[rgb(0,0,0,0.025)]'}`}>
+		<div onClick={handleClickPost} className={`sectionWrapper borderBottom ${isPage ? '' : 'transition-colors ease-out cursor-pointer hover:bg-[rgb(0,0,0,0.025)]'}`}>
 			
 			<div className='section-left'>
 				<div className='relative userInfoBox'>
@@ -121,15 +119,18 @@ const PostCard = ({post, isPage, navToProfile=true }) => {
 							<AvatarOrNameBox username={post?.author?.username} userId={post?.author?._id} navToProfile={navToProfile}/>
 						</div>
 			
-						<div className='text-[14px] text-mernDarkGray'>
+						<div className='text-[13px] text-mernLightGray'>
 							{ isPage 
-							? <Moment format="LT , MMM D, YYYY">{post?.createdAt}</Moment> 
-							: <><span className='hidden 480px:inline-block'>·</span><Moment fromNow>{post?.createdAt}</Moment></>
+							? <span>{calendarFormat(post?.createdAt)}</span> 
+							: <div className='mt-[2px]'>
+								<span className='hidden 480px:inline-block'>·</span>
+								<span>{dayjs(post?.createdAt).fromNow()}</span>
+							</div>
 							}
 						</div>
 					</div>
 					{ post?.author?._id === user._id &&
-					<TooltipBox tip='删除' handleOnClick={(e) => handleDeletePost(e)} Icon={DeleteOutlineIcon} iconStyle='!text-[19px]' option='text-mernLightGray hover-div:text-[#00ba7c] hover-div:bg-[#e9fbf5]'/>
+					<TooltipBox tip='删除' handleOnClick={(e) => handleDeletePost(e)} Icon={DeleteOutlineIcon} iconStyle='!text-[18px]' option='text-mernLightGray hover-div:text-[#00ba7c] hover-div:bg-[#e9fbf5]'/>
 					}
 				</div>
 

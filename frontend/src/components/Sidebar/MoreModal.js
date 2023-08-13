@@ -8,13 +8,14 @@ import { resetColloctedPosts } from '../../redux/features/postsSlice';
 import { AppContext } from '../../context/appContext';
 
 const MoreModal = () => {
-    const { socket } = useContext(AppContext);
+    const { socket, resetContext } = useContext(AppContext);
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const handleLogout = () => {
         dispatch(setLogout());
         dispatch(resetColloctedPosts());
+        resetContext();
         socket.emit('remove-conUser');
         navigate('/login');
     }

@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Avatar } from '@mui/material';
-import Moment from 'react-moment';
+import dayjs from '../../helpers/dayjsHelper';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import Cover from '../atoms/Cover';
@@ -51,13 +51,7 @@ const ProfileInfo = ({profile}) => {
                 </div>
                 <div className='flex items-center'>
                     <CalendarMonthIcon className='!text-[18px] !mr-[4px]'/>
-                    <span>
-                        <Moment format="YYYY">{profile?.createdAt}</Moment>
-                        年
-                        <Moment format="MM">{profile?.createdAt}</Moment>
-                        月
-                        <span className='ml-[3px]'>加入</span>
-                    </span>
+                    <span>{dayjs(profile?.createdAt).format('YYYY年MM月 加入')}</span>
                 </div>
             </div>
             <div className='flex gap-[20px] w-full text-[15px]'>

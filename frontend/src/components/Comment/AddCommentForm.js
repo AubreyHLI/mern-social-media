@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useRef } from 'react';
 import CloseIcon from '@mui/icons-material/Close';
 import Tweetbox from '../atoms/Tweetbox';
-import Moment from 'react-moment';
 import axios from 'axios';
+import { calendarFormat } from '../../helpers/dayjsHelper';
 import { Avatar } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { setAPost } from '../../redux/features/postsSlice';
@@ -38,7 +38,7 @@ const AddCommentForm = ({postId, setOpen}) => {
                     type: 'commentPost',
 					targetPost: {
                         id: post?._id,
-                        text: post?.postText,
+                        text: post?.postText?.slice(0,30),
                         thumbnail: post?.postPicture?.thumbnail,
                     },
                     commentContent: response.data.newComment,
@@ -77,9 +77,9 @@ const AddCommentForm = ({postId, setOpen}) => {
                         {/* postUserInfo */}
                         <div className='flex items-center h-[25px]'>
                             <h3 className='font-[600] text-[16px] flex items-center'>{post?.author?.username}</h3>
-                            <div className='text-[14px] text-mernDarkGray'>
+                            <div className='text-[14px] text-mernLightGray'>
                                 <span>·</span>
-                                <Moment fromNow>{post?.createdAt}</Moment>
+                                <span>{calendarFormat(post?.createdAt)}</span>
                             </div>
                         </div>
 				        

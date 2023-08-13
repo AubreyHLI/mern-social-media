@@ -48,10 +48,10 @@ const UserSchema = new Schema({
         type: mongoose.Types.ObjectId,
         ref: "Post"
     } ],
-    newNotifications: [ {
-        type: mongoose.Types.ObjectId,
-        ref: "Notification",
-    } ],
+    newNotifyCount: { 
+        type: Number, 
+        default: 0 
+    },
     createdAt: {
         type: Date,
         default: Date.now,

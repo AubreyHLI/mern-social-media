@@ -13,15 +13,19 @@ export const postsSlice = createSlice({
             state.posts = action.payload.posts;
         },
         setAPost: (state, action) => {
-            const updatedPosts = state.posts.map(p => {
-                // only update the updated post
-                if(p._id === action.payload.post._id) {
-                    return action.payload.post;
-                } else {
-                    return p;
-                }
-            });
-            state.posts = updatedPosts;
+            if(state.posts.length === 0) {
+                state.posts.push(action.payload.post);
+            } else {
+                const updatedPosts = state.posts.map(p => {
+                    // only update the updated post
+                    if(p._id === action.payload.post._id) {
+                        return action.payload.post;
+                    } else {
+                        return p;
+                    }
+                });
+                state.posts = updatedPosts;
+            }
         },
         setSomePosts: (state, action) => {
             const updatedPosts = state.posts.map(p => {

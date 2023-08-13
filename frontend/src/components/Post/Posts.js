@@ -12,7 +12,6 @@ const Posts = () => {
         fetchAllPosts();
     }, [])
 
-
     const fetchAllPosts = async () => {
         console.log('fetch all posts')
         try {
@@ -25,7 +24,6 @@ const Posts = () => {
             else console.log('error:', error.message);
         }
     }
-
 
     return (
     <>   

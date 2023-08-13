@@ -1,99 +1,73 @@
 import React from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import { Avatar } from '@mui/material'
-import Moment from 'react-moment';
+import { useNavigate } from 'react-router-dom'
+import dayjs from '../../helpers/dayjsHelper';
+import AvatarOrNameBox from '../atoms/AvatarOrNameBox';
 
 
 const NotificationCard = ({notification}) => {
     const {from, notifyType, targetPost, targetComment, commentContent, isRead, createdAt} = notification;
     const navigate = useNavigate();
 
-    const clickName = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        navigate(`/profile/${from._id}`);
-    }
-    
-    return (
-        <div className='borderBottom flex'>
-            <div>
-                <Avatar src={from?.imageUrl.url} onClick={clickName} className='cursor-pointer hover:brightness-95 transition-all'/> 
-            </div>
-            <div className='w-full'>
-                <div className='w-full'>
-                    {notifyType === 'follow' && <FollowNotify from={from} />}
-                    {notifyType === 'likePost' && <LikePostNotify from={from} targetPost={targetPost} />}
-                    {notifyType === 'commentPost' && <CommentPostNotify from={from} targetPost={targetPost} commentContent={commentContent} />}
-                    {notifyType === 'likeComment' && <LikeCommentNotify from={from} targetComment={targetComment} />}
-                </div>
-                <span className='text-[14px]'><Moment fromNow>{createdAt}</Moment></span>
-            </div>
-           
+    let content = null;
+    let actionText = '';
+    let actionComment = '';
+    let image = null;
+    let link = '';
 
-           
+    switch (notifyType) {
+        case 'follow':
+            actionText = '开始关注你.';
+            link = `/profile/${from?._id}`;
+            break;
+        case 'likePost':
+            actionText = '赞了你的动态.';
+            image = targetPost?.thumbnail;
+            content = targetPost?.text;
+            link = `/post/${targetPost?.id}`;
+            break;
+        case 'commentPost':
+            actionText = '评论了你：';
+            actionComment = `${commentContent?.text}${commentContent?.withImage ? '[图片]' : ''}`;
+            image = targetPost?.thumbnail;
+            content = targetPost?.text;
+            link = `/post/${targetPost?.id}?commentId=${commentContent?.id}`;
+            break;
+        case 'likeComment':
+            actionText = '赞了你的评论.';
+            image = targetComment?.thumbnail;
+            content = targetComment?.text;
+            link = `/post/${targetPost?.id}?commentId=${targetComment?.id}`;
+            break;
+        default:
+            return null;
+    }
+
+
+    return (
+        <div onClick={() => navigate(link)} className='sectionWrapper !py-[10px] flex gap-[8px] cursor-pointer transition-colors ease-out cursor-pointer hover:bg-[rgb(0,0,0,0.03)]'>
+            <div>
+                <AvatarOrNameBox userId={from?._id} avatarUrl={from?.imageUrl?.url} avatarStyle='!w-[40px] !h-[40px]'/>
+            </div>
+            <div className='w-full min-h-[50px]'>
+                <div className='flex justify-between w-full'>
+                    <div className='flex flex-col justify-between text-[15px] flex-1 min-h-[50px]'>
+                        <div>
+                            <AvatarOrNameBox userId={from?._id} username={from?.username} usernameStyle='!text-[15px] w-fit inline mr-[8px]'/> 
+                            <span className=''>{actionText}<span className='text-mernDarkGray'>{actionComment}</span></span>
+                        </div>
+                        <div className='text-[12px] text-mernLightGray'>{dayjs(createdAt).fromNow()}</div>
+                    </div>
+
+                    {(image || content) &&
+                    <div className='w-[50px] h-[50px] border border-mernBorder px-[3px] py-[2px] text-mernLightGray ml-[8px]'>
+                        {image ? <img src={image} alt='' className='w-[45px] object-cover'/> 
+                        : <p className='line-clamp-3 text-[10px] '>{content}</p>}
+                    </div>
+                    }
+                </div>
+            </div>           
         </div>
     )
 }
 
 export default NotificationCard
-
-const FollowNotify = ({from}) => {
-    return ( 
-        <div className='flex gap-4 text-[15px]'>
-            <span className='font-[600] cursor-pointer hover:underline'>{from?.username}</span> 
-            <span>开始关注你.</span>
-        </div>
-    )
-}
-
-const LikePostNotify = ({from, targetPost}) => {
-    return (
-        <div className='flex justify-between w-full'>
-            <div className='flex gap-4 text-[15px] flex-1'>
-                <span className='font-[600] cursor-pointer hover:underline'>{from?.username}</span> 
-                <span>赞了你的动态.</span>
-            </div>
-            <div>
-                {targetPost?.thumbnail 
-                ? <img src={targetPost?.thumbnail} alt='' className='w-[60px]'/> 
-                : <span>{targetPost?.text}</span>
-                }
-            </div>
-        </div>
-    )
-}
-
-const CommentPostNotify = ({from, targetPost, commentContent}) => {
-    return (
-        <div className='flex justify-between w-full'>
-            <div className='text-[15px] flex-1'>
-                <span className='font-[600] cursor-pointer hover:underline mr-[10px]'>{from?.username}</span> 
-                <span>评论了你的动态：{commentContent?.text}{commentContent?.thumbnail && '[图片]'}</span>
-            </div>
-            <span>
-                {targetPost?.thumbnail 
-                ? <img src={targetPost?.thumbnail} alt='' className='w-[60px]'/> 
-                : <span>{targetPost?.text}</span>
-                }
-            </span>
-        </div>
-    )
-}
-
-const LikeCommentNotify = ({from, targetComment}) => {
-    return (
-        <div className='flex justify-between w-full'>
-           <div className='flex gap-4 text-[15px] flex-1'>
-                <span className='font-[600] cursor-pointer hover:underline'>{from?.username}</span> 
-                <span>赞了你的评论.</span>
-            </div>
-            <span>
-                {targetComment?.thumbnail 
-                ? <img src={targetComment?.thumbnail} alt='' className='w-[60px]'/> 
-                : <span>{targetComment?.text}</span>
-                }
-            </span>
-        </div>
-    )
-}
-

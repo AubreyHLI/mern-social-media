@@ -1,15 +1,32 @@
 import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
 import PostCard from './PostCard';
 import CommentCard from '../Comment/CommentCard'
 import Header from '../Layout/Header';
 import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
+import { setAPost } from '../../redux/features/postsSlice';
+import { useLocation } from 'react-router-dom';
 
 
 const SinglePost = ({postId}) => {
     const [comments, setComments] = useState();
-    const [post, setPost] = useState();
+    const [commentsLoading, setCommentsLoading] = useState(true);
+    const posts = useSelector(state => state.posts.posts);
+    const post = posts.find(p => p._id === postId);
+
     const dispatch = useDispatch();
+    const location  = useLocation();
+    const commentId = new URLSearchParams(location.search).get('commentId');
+
+    useEffect(() => {
+        if (commentId) {
+            // Scroll to the comment section using DOM manipulation
+            const commentSection = document.getElementById(`comment-${commentId}`);
+            if (commentSection) {
+                commentSection.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+    }, [commentId, commentsLoading]);
 
     useEffect(() => {
         fetchSinglePost();
@@ -17,14 +34,14 @@ const SinglePost = ({postId}) => {
 
     useEffect(() => {
         fetchPostComments();
-    }, [post?.comments])
+    }, [post?.comments, post?.like])
 
 
     const fetchSinglePost = async () => {
         try {
             const response = await axios.get(`post/${postId}`);
             if(response.data.success) {
-                setPost(response.data.post);
+                dispatch( setAPost({ post: response.data.post }) );
             }
         } catch(error) {
 			if(error.name === 'AxiosError') console.log('error:', error.response.data.message);
@@ -37,6 +54,7 @@ const SinglePost = ({postId}) => {
             const response = await axios.get(`post/${postId}/comments`);
             if(response.data.success) {
                 setComments(response.data.comments);
+                setCommentsLoading(false);
             }
         } catch(error) {
 			if(error.name === 'AxiosError') console.log('error:', error.response.data.message);

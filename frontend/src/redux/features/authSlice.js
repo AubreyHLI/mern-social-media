@@ -40,9 +40,9 @@ export const authSlice = createSlice({
                 console.log("User non-existent :(");
             }
         },
-        setUserNotifs: (state, action) => {
+        increaseUserNotif: (state, action) => {
             if(state.user) {
-                state.user.newNotifications = action.payload;
+                state.user.newNotifyCount += 1;
             } else {
                 console.log("User non-existent :(");
             }
@@ -59,7 +59,7 @@ export const {
     setUserFollowings, 
     setUserFollowers, 
     setUserCollects,
-    setUserNotifs,
+    increaseUserNotif,
  } = authSlice.actions;
 
 // export reducer

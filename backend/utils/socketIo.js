@@ -50,22 +50,27 @@ const getIo = (server) => {
         })
         
         socket.on("send-notification", async ({ senderId, receiverId, type, targetPost, targetComment, commentContent }) => {
-            if(senderId !== receiverId) {
-                const newNotification = new Notification({
-                    from: senderId,
-                    to: receiverId,
-                    notifyType: type,
-                    targetPost,
-                    targetComment,
-                    commentContent
-                });
-                await newNotification.save();
-                const updatedUser = await User.findOneAndUpdate({_id: receiverId}, {$push: {newNotifications: newNotification._id}}, {new:true});
-                const receiver = getConUser(receiverId);
-                if(receiver) {
-                    io.to(receiver.socketId).emit('new-notification', updatedUser.newNotifications);
-                } 
+            try{
+                if(senderId !== receiverId) {
+                    const newNotification = new Notification({
+                        from: senderId,
+                        to: receiverId,
+                        notifyType: type,
+                        targetPost,
+                        targetComment,
+                        commentContent
+                    });
+                    await newNotification.save();
+                    await User.updateOne({ _id: receiverId }, { $inc: { newNotifyCount: 1 } });
+                    const receiver = getConUser(receiverId);
+                    if(receiver) {
+                        io.to(receiver.socketId).emit('new-notification');
+                    } 
+                }
+            } catch(error) {
+                io.to('socket-error', error)
             }
+            
         });
 
 

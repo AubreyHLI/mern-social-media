@@ -14,7 +14,7 @@ import AddIcon from '@mui/icons-material/Add';
 import SidebarOption from '../Sidebar/SidebarOption';
 import NewPostModal from '../Sidebar/NewPostModal';
 import MoreModal from '../Sidebar/MoreModal';
-import { setUserNotifs } from '../../redux/features/authSlice';
+import { increaseUserNotif } from '../../redux/features/authSlice';
 
 
 const Sidebar = ({active}) => {
@@ -36,7 +36,7 @@ const Sidebar = ({active}) => {
 
 
     socket.off('new-notification').on('new-notification', (payload) => {
-		dispatch(setUserNotifs(payload));
+		dispatch(increaseUserNotif());
     });
 
     const fetchNewNotifications = async () => {
@@ -58,7 +58,7 @@ const Sidebar = ({active}) => {
         <nav className='w-full flex justify-around 480px:flex-col 480px:gap-[2px] 480px:items-center 480px:mt-[20px] 600px:items-start 1200px:w-[220px] 1200px:ml-[12px] 1200px:mr-[20px]'>
             <SidebarOption label='首页' Icon={HomeOutlinedIcon} isActive={active === 1} path='/' />
             <SidebarOption label='探索' Icon={SearchOutlinedIcon} isActive={active === 2} path='/Explore' />
-            <SidebarOption label='通知' Icon={NotificationsNoneIcon} isActive={active === 3} isHidden={true} path='/notifications' notif={user?.newNotifications?.length}/>
+            <SidebarOption label='通知' Icon={NotificationsNoneIcon} isActive={active === 3} isHidden={true} path='/notifications' notif={user?.newNotifyCount}/>
             <button onClick={() => setOpenNewPost(true)} className='btn-post 480px:!hidden'>
                 <AddIcon />
                 <span className='hidden 600px:block'>发布动态</span>

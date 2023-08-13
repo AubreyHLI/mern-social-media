@@ -28,7 +28,7 @@ function App() {
 
 	return (
 	<BrowserRouter>
-		<div className="app h-full w-full min-h-full min-w-[300px] max-w-[1350px] my-0 mx-auto">
+		<div className="app h-full w-full min-h-full min-w-[320px] max-w-[1350px] my-0 mx-auto">
 			<Routes>
 				<Route path='/' element={<AuthProtectedRoute><CommonLayout /></AuthProtectedRoute>}>
 					<Route index element={<Home />} />

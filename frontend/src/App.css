@@ -132,7 +132,7 @@ em-emoji-picker {
     @apply flex-1;
 }
 .avatar {
-    @apply !w-[50px] !h-[50px] rounded-[50%] border border-[#ebeced] cursor-pointer hover:brightness-95 transition-all duration-300 ease-out bg-white;
+    @apply rounded-[50%] border border-[#ebeced] cursor-pointer hover:brightness-95 transition-all duration-300 ease-out bg-white;
 }
 
 .borderBottom {

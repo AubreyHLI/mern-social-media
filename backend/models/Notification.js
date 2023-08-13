@@ -21,7 +21,7 @@ const NotificationSchema = new Schema({
     commentContent: {
         id: String,
         text: String,
-        thumbnail: String,
+        withImage: Boolean,
     },
     isRead: { type: Boolean, default: false },
     createdAt: { type: Date,  default: Date.now },

@@ -19,8 +19,7 @@ const BookmarksFeed = () => {
         try {
             const response = await axios.get(`user/collectedPosts`);
             if(response.data.success) {
-                const sortedPosts = response.data.collectedPosts.reverse();
-                dispatch( setCollectedPosts({ collectedPosts: sortedPosts }) );
+                dispatch( setCollectedPosts({ collectedPosts: response.data.collectedPosts }) );
                 dispatch( setUserCollects({ updatedCollects: response.data.collects }) );
             }
         } catch(error) {

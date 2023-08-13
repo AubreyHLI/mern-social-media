@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import AvatarOrNameBox from '../atoms/AvatarOrNameBox'
-import Moment from 'react-moment';
+import dayjs from '../../helpers/dayjsHelper';
 import LikedBtn from '../atoms/LikedBtn';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
@@ -51,7 +51,7 @@ const CommentCard = ({comment, postId, setComments}) => {
 						},
 						targetComment: {
 							id: comment?._id,
-							text: comment?.commentText,
+							text: comment?.commentText?.slice(0,30),
 							thumbnail: comment?.commentPicture?.thumbnail,
 						},
 					});
@@ -65,7 +65,7 @@ const CommentCard = ({comment, postId, setComments}) => {
 
 
 	return (
-		<div key={postId} id={`comment-${postId}`} className='sectionWrapper borderBottom'>
+		<div key={postId} id={`comment-${comment?._id}`} className='sectionWrapper borderBottom'>
 			<div className='section-left'>
 				<AvatarOrNameBox avatarUrl={comment?.author?.imageUrl?.url} userId={comment?.author?._id} />
 			</div>
@@ -73,9 +73,9 @@ const CommentCard = ({comment, postId, setComments}) => {
 			<div className='section-right'>
 				<div className='h-[50px] flex flex-col items-start 480px:flex-row 480px:h-[25px] 480px:items-center'>
 					<AvatarOrNameBox username={comment?.author?.username} userId={comment?.author?._id} />
-					<div className='text-[14px] text-mernDarkGray'>
+					<div className='mt-[1px] text-[13px] text-mernLightGray'>
 						<span className='hidden 480px:inline-block'>·</span>
-						<Moment fromNow>{comment?.createdAt}</Moment>
+						<span>{dayjs(comment?.createdAt).fromNow()}</span>
 					</div>
 				</div>
 

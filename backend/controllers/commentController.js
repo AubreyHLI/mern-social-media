@@ -35,7 +35,7 @@ const createComment = asyncHandler( async(req, res, next) => {
             newComment: {
                 id: newComment._id,
                 text: newComment?.commentText,
-                thumbnail: newComment?.commentPicture?.thumbnail
+                withImage: newComment.commentPicture.url ? true : false
             },
         })
     } catch(error) {

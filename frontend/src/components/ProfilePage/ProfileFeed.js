@@ -6,13 +6,14 @@ import Header from '../Layout/Header';
 import ProfileInfo from './ProfileInfo';
 import PostCard from '../Post/PostCard';
 import axios from 'axios';
+import { setUserFollowers, setUserFollowings } from '../../redux/features/authSlice';
 
 
 const ProfileFeed = () => {
     const { profileId } = useParams();
+    const [isUser, setIsUser] = useState(false);
     const [profile, setProfile] = useState();
     const user = useSelector(state => state.auth.user);
-    const { username, bio, location, followings, followers } = user;
     const posts = useSelector(state => state.posts.posts);
 	const profilePosts = posts.filter(p => p.author._id === profileId);
     const dispatch = useDispatch();
@@ -22,10 +23,6 @@ const ProfileFeed = () => {
         getProfileInfo();
     }, [profileId])
 
-
-    useEffect(() => {
-        getProfileInfo();
-    }, [username, bio, location, followings, followers])
 
     const fetchAllPosts = async () => {
         console.log('fetch all posts')
@@ -42,9 +39,14 @@ const ProfileFeed = () => {
 
     const getProfileInfo = async () => {
         try {
-            const response = await axios.get(`user/${profileId}/profileInfo`);
-            if(response.data.success) {
-                setProfile(response.data.profile);
+            const {data} = await axios.get(`user/${profileId}/profileInfo`);
+            if(data.success) {
+                setProfile(data.profile);
+                setIsUser(profileId === user._id);
+                if(profileId === user._id) {
+                    dispatch(setUserFollowers({followers: data.profile.followers}));
+                    dispatch(setUserFollowings({followings: data.profile.followings}));
+                }
             }
         } catch(error) {
             if(error.name === 'AxiosError') console.log('error:', error.response.data.message);
@@ -55,9 +57,11 @@ const ProfileFeed = () => {
 
     return (
         <div className='mainWrapper'>
-            <Header withBackward={true} heading={profile?.username} subHeading={profilePosts?.length} />
+            <Header withBackward={true} 
+                heading={isUser ? user?.username : profile?.username} 
+                subHeading={profilePosts?.length} />
 
-			<ProfileInfo profile={profile} />
+			<ProfileInfo profile={isUser ? user : profile} />
             
             <div className='w-full'>
                 <h1 className='w-full border-b-[2px] border-b-mernBorder px-[16px] 1200px:px-[24px] font-[500] text-[18px] pb-[10px]'>
