@@ -134,10 +134,10 @@ const EditProfileInfo = ({setOpen}) => {
                         <Input type='text' id={username} placeholder='用户名' inputValue={username} setInputValue={setUsername} wordLimit={30}/>
                     </div>
                     <div>
-                        <Input type='text' id={bio} placeholder='个性签名' inputValue={bio} setInputValue={setBio} wordLimit={160}/>
+                        <Input type='text' id={bio} placeholder='个性签名' inputValue={bio} setInputValue={setBio} wordLimit={200}/>
                     </div>
                     <div>
-                        <Input type='text' id={location} placeholder='地区' inputValue={location} setInputValue={setLocation} wordLimit={30}/>
+                        <Input type='text' id={location} placeholder='地区' inputValue={location} setInputValue={setLocation} wordLimit={50}/>
                     </div>
                 </div>
             </div>

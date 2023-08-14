@@ -115,7 +115,7 @@ em-emoji-picker {
 }
 
 .widgetsContainer {
-    @apply mx-[8px] w-[28%] max-w-[350px] hidden 900px:inline-block 1200px:mx-[16px] 1350px:mr-0;
+    @apply mx-[8px] w-[28%] max-w-[350px] hidden 900px:inline-block 1200px:mx-[16px];
 }
 
 .mainWrapper {

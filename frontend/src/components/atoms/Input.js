@@ -39,8 +39,8 @@ const Input =  ({type, id, placeholder, inputName, inputValue, setInputValue, wo
             { type === 'password' && (
             <span className='absolute right-[15px] bottom-[2px]' onClick={() => setPsVisible(prev => !prev)}>
                 {!pwVisible 
-                ? <VisibilityIcon className='text-[20px] text-[#abaaaa]'/> 
-                : <VisibilityOffIcon className='text-[20px] text-[#abaaaa]'/>}
+                ? <VisibilityIcon className='!text-[20px] !text-[#abaaaa] cursor-pointer'/> 
+                : <VisibilityOffIcon className='!text-[20px] !text-[#abaaaa] cursor-pointer'/>}
             </span>
             )}
 

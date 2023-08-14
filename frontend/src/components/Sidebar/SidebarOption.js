@@ -14,7 +14,7 @@ const SidebarOption = ({isActive, label, Icon, isHidden, path, avatar, notif}) =
                     <h2 className={`text-[19px] font-[400] hidden 600px:inline 1200px:text-[20px] ${isActive && 'font-[600]'}`}>
                         {label}
                     </h2>
-                    {notif > 0 && <span className='absolute top-[-4px] left-[16px] w-fit h-[18px] min-w-[18px] px-[4px] rounded-[10px] bg-[#ff3040] text-white text-[12px] font-[500] text-center'>{notif}</span>}                    
+                    {notif > 0 && <span className='absolute top-[-4px] left-[16px] w-fit h-[18px] min-w-[18px] px-[4px] rounded-[10px] bg-[#ff3040] text-white text-[12px] font-[500] text-center'>{notif < 100 ? notif : '99+'}</span>}                    
                 </div>
             </Link>  
         </div>

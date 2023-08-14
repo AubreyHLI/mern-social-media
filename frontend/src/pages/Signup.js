@@ -69,9 +69,7 @@ const Signup = () => {
                     else newFormData.append(value, validValuesObj[value]);
                 }
 
-                const signupResponse = await axios.post(`user/register`,
-                    newFormData
-                );
+                const signupResponse = await axios.post(`user/register`, newFormData );
                 if(signupResponse.data.success) {
                     navigate('/login');
                 }
@@ -89,7 +87,7 @@ const Signup = () => {
                 <Link to='/'><img className='w-[300px]' src={logo} alt=''/></Link>
             </div>
             <div className='my-0 mx-auto px-[32px] h-full min-w-[350px] max-w-[800px]'>                
-                <h1 className="text-[24px] my-[16px]">创建新账号</h1>
+                <h1 className="text-[24px] my-[16px]">注册新账号</h1>
                 <form className='flex flex-col gap-[4px] 600px:flex-row 600px:gap-[30px]'>
                     <div className='flex items-end 600px:flex-col my-[12px] gap-[12px]'>
                         <Avatar alt='' src={`${avatar ? URL.createObjectURL(avatar) : ''}`} sx={{ width: 100, height: 100 }} className='border-2'/>
@@ -99,11 +97,11 @@ const Signup = () => {
                         </button> 
                     </div>
                     <div>
-                        <Input type='text' id='username' inputName='username' placeholder='Username' inputValue={username} setInputValue={setUsername}/>
-                        <Input type='email' id='email' inputName='email' placeholder='Email' inputValue={email} setInputValue={setEmail} />
-                        <Input type='password' id='password' inputName='password' placeholder='Password' inputValue={password} setInputValue={setPassword} />
-                        <Input type='password' id='confirmPassword' inputName='confirmedPW' placeholder='Confirm Password' inputValue={confirmedPW} setInputValue={setConfirmedPw} />
-                        <Input type='text' id='location' inputName='location' placeholder='Location' inputValue={location} setInputValue={setLocation}/>
+                        <Input type='text' id='username' inputName='username' placeholder='用户名' inputValue={username} setInputValue={setUsername} wordLimit={30}/>
+                        <Input type='email' id='email' inputName='email' placeholder='Email' inputValue={email} setInputValue={setEmail} wordLimit={50}/>
+                        <Input type='password' id='password' inputName='password' placeholder='密码' inputValue={password} setInputValue={setPassword} wordLimit={20}/>
+                        <Input type='password' id='confirmPassword' inputName='confirmedPW' placeholder='确认密码' inputValue={confirmedPW} setInputValue={setConfirmedPw} />
+                        <Input type='text' id='location' inputName='location' placeholder='地区' inputValue={location} setInputValue={setLocation} wordLimit={50}/>
                     </div>
                 </form>
                 <button className='btn-primary' onClick={handleSignup}>注册</button>

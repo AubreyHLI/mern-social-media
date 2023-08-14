@@ -41,8 +41,7 @@ const Sidebar = ({active}) => {
 
 
   return (
-    <>
-    <div className='w-full p-[4px] flex flex-col items-center bg-[rgba(246,248,248)] backdrop-blur-[10px] 
+    <div className='relative w-full p-[4px] flex flex-col items-center bg-[rgba(246,248,248)] backdrop-blur-[10px] 
         480px:bg-[#fff] 480px:mt-[20px] 480px:backdrop-blur-none 480px:h-full 480px:min-h-[580px] 480px:w-[80px] 480px:py-[12px] 480px:px-[8px]
         600px:w-[150px] 1200px:w-[270px] 1200px:items-start'>
         
@@ -80,12 +79,11 @@ const Sidebar = ({active}) => {
                 </div>
             </div>
         </div>
+
+        {openMore && <MoreModal />}
+
+        {openNewPost && <NewPostModal setOpen={setOpenNewPost}/>}
     </div>
-
-    {openMore && <MoreModal />}
-
-    {openNewPost && <NewPostModal setOpen={setOpenNewPost}/>}
-    </>
   )
 }
 

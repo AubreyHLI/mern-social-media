@@ -54,11 +54,11 @@ const Login = () => {
                 <h1 className="text-[24px] my-[16px]">请通过电子邮箱登陆账号</h1>
                 <form>
                     <Input type='email' id='email' inputName='email' placeholder='Email' inputValue={email} setInputValue={setEmail}/>
-                    <Input type='password' id='password' inputName='password' placeholder='Password' inputValue={password} setInputValue={setPassword}/>
+                    <Input type='password' id='password' inputName='password' placeholder='密码' inputValue={password} setInputValue={setPassword}/>
                 </form>
                 <button className='btn-primary' onClick={handleLogin}>登陆</button>
                 <div className='text-center py-[16px] text-[rgb(147,145,145)]'>
-                    <p>Don't have an account ?<Link to='/signup' className='switch-link'>注册新账号</Link></p>
+                    <p>Don't have an account ?<Link to='/signup' className='switch-link'>立即注册</Link></p>
                 </div>
             </div>
         </div>

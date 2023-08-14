@@ -1,10 +1,13 @@
 import { Avatar } from '@mui/material'
 import React from 'react'
 import { useSelector } from 'react-redux'
+import { Link } from 'react-router-dom';
 
 const UserWidget = () => {
 	const user = useSelector(state => state.auth.user);
+
     return (
+    <Link to={`/profile/${user._id}`}>
 		<div className='rounded-[20px] mt-[8px] flex flex-col items-center bg-mernBgLight p-[16px] pb-[20px]'>
 			<Avatar src={user?.imageUrl?.url} alt='' sx={{width:80, height:80}} className='border bg-white'/>
 			<h2 className='font-bold text-xl mt-[1px] break-all line-clamp-1'>{user?.username}</h2>
@@ -20,6 +23,7 @@ const UserWidget = () => {
                 </div>
             </div>
 		</div>
+    </Link>
     )
 }
 
