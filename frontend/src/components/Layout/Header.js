@@ -4,7 +4,7 @@ import TooltipBox from '../atoms/TooltipBox'
 
 const Header = ({heading, withBackward, subHeading = null, subText='篇内容', children}) => {
     return (
-        <div className={`sticky top-0 w-full z-[100] ${children ? 'h-[100px]' : 'h-[60px]'} bg-[#f6f8f8d9] backdrop-blur-[10px] flex flex-col justify-between  480px:bg-[#ffffffd9]`}>
+        <div className={`sticky top-0 w-full z-[100] ${children ? 'h-[95px]' : 'h-[60px]'} bg-[#f6f8f8d9] backdrop-blur-[10px] flex flex-col justify-between  480px:bg-[#ffffffd9]`}>
             <div className={`flex h-[60px] items-center w-full px-[16px] ${withBackward && 'gap-[10px]'}`}>
                 { withBackward && 
                 <TooltipBox tip='返回' Icon={KeyboardBackspaceIcon} option={'hover-div:bg-mernBorder'}

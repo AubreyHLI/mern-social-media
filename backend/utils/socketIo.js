@@ -61,7 +61,7 @@ const getIo = (server) => {
                         commentContent
                     });
                     await newNotification.save();
-                    await User.updateOne({ _id: receiverId }, { $inc: { newNotifyCount: 1 } });
+                    await User.updateOne({ _id: receiverId }, { $inc: { newNotifCount: 1 } });
                     const receiver = getConUser(receiverId);
                     if(receiver) {
                         io.to(receiver.socketId).emit('new-notification');
@@ -70,8 +70,15 @@ const getIo = (server) => {
             } catch(error) {
                 io.to('socket-error', error)
             }
-            
         });
+
+        socket.on("read-newNotifications", async (receiverId) => {
+            try{
+                await User.updateOne({ _id: receiverId }, { $set: { newNotifCount: 0 } });
+            } catch(error) {
+                io.to('socket-error', error)
+            }
+        })
 
 
         socket.on("disconnect", () => {

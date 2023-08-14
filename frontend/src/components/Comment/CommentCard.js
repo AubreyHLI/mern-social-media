@@ -1,8 +1,8 @@
 import React, { useContext } from 'react'
 import AvatarOrNameBox from '../atoms/AvatarOrNameBox'
-import dayjs from '../../helpers/dayjsHelper';
 import LikedBtn from '../atoms/LikedBtn';
 import axios from 'axios';
+import { calendarFormatBrif } from '../../helpers/dayjsHelper';
 import { useDispatch, useSelector } from 'react-redux';
 import { setPostComments } from '../../redux/features/postsSlice';
 import { AppContext } from '../../context/appContext';
@@ -65,7 +65,7 @@ const CommentCard = ({comment, postId, setComments}) => {
 
 
 	return (
-		<div key={postId} id={`comment-${comment?._id}`} className='sectionWrapper borderBottom'>
+		<div key={postId} id={`comment-${comment?._id}`} className='sectionWrapper borderBottom focus:bg-[#cccccc]'>
 			<div className='section-left'>
 				<AvatarOrNameBox avatarUrl={comment?.author?.imageUrl?.url} userId={comment?.author?._id} />
 			</div>
@@ -75,7 +75,7 @@ const CommentCard = ({comment, postId, setComments}) => {
 					<AvatarOrNameBox username={comment?.author?.username} userId={comment?.author?._id} />
 					<div className='mt-[1px] text-[13px] text-mernLightGray'>
 						<span className='hidden 480px:inline-block'>·</span>
-						<span>{dayjs(comment?.createdAt).fromNow()}</span>
+						<span>{calendarFormatBrif(comment?.createdAt)}</span>
 					</div>
 				</div>
 

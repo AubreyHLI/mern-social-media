@@ -4,8 +4,8 @@ import dayjs from '../../helpers/dayjsHelper';
 import AvatarOrNameBox from '../atoms/AvatarOrNameBox';
 
 
-const NotificationCard = ({notification}) => {
-    const {from, notifyType, targetPost, targetComment, commentContent, isRead, createdAt} = notification;
+const NotificationCard = ({notification }) => {
+    const {from, notifyType, targetPost, targetComment, commentContent, createdAt} = notification;
     const navigate = useNavigate();
 
     let content = null;
@@ -50,16 +50,18 @@ const NotificationCard = ({notification}) => {
             </div>
             <div className='w-full min-h-[50px]'>
                 <div className='flex justify-between w-full'>
-                    <div className='flex flex-col justify-between text-[15px] flex-1 min-h-[50px]'>
+                    <div className='flex flex-col justify-between gap-[9px] text-[15px] flex-1 min-h-[50px]'>
                         <div>
                             <AvatarOrNameBox userId={from?._id} username={from?.username} usernameStyle='!text-[15px] w-fit inline mr-[8px]'/> 
-                            <span className=''>{actionText}<span className='text-mernDarkGray'>{actionComment}</span></span>
+                            <span className=''>{actionText}<span className='text-mernDarkGray text-[14px]'>{actionComment}</span></span>
                         </div>
-                        <div className='text-[12px] text-mernLightGray'>{dayjs(createdAt).fromNow()}</div>
+                        <div className='text-[12px] text-mernLightGray'>
+                            {dayjs(createdAt).fromNow()}
+                        </div>
                     </div>
 
                     {(image || content) &&
-                    <div className='w-[50px] h-[50px] border border-mernBorder px-[3px] py-[2px] text-mernLightGray ml-[8px]'>
+                    <div className='w-[50px] h-[50px] border border-mernBorder px-[3px] py-[2px] text-mernLightGray ml-[16px]'>
                         {image ? <img src={image} alt='' className='w-[45px] object-cover'/> 
                         : <p className='line-clamp-3 text-[10px] '>{content}</p>}
                     </div>

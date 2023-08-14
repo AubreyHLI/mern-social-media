@@ -42,7 +42,14 @@ export const authSlice = createSlice({
         },
         increaseUserNotif: (state, action) => {
             if(state.user) {
-                state.user.newNotifyCount += 1;
+                state.user.newNotifCount += 1;
+            } else {
+                console.log("User non-existent :(");
+            }
+        },
+        clearUserNotif: (state, action) => {
+            if(state.user) {
+                state.user.newNotifCount = [];
             } else {
                 console.log("User non-existent :(");
             }
@@ -60,6 +67,7 @@ export const {
     setUserFollowers, 
     setUserCollects,
     increaseUserNotif,
+    clearUserNotif,
  } = authSlice.actions;
 
 // export reducer

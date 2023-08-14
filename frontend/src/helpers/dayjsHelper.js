@@ -9,12 +9,29 @@ dayjs.extend(calendar);
 
 export const calendarFormat = (date) => {
     const calendarDate = dayjs(date).calendar(null, {
-        sameDay: '[今天] hh:mm', 
-        nextDay: '[明天] hh:mm',
-        lastDay: '[昨天] hh:mm',
-        nextWeek: 'YYYY/MM/DD hh:mm', 
-        lastWeek: 'YYYY/MM/DD hh:mm', 
-        sameElse: 'YYYY/MM/DD hh:mm' // Everything else ( 17/10/2011 )
+        sameDay: '[今天] HH:mm', 
+        nextDay: '[明天] HH:mm',
+        lastDay: '[昨天] HH:mm',
+        nextWeek: 'MM-DD [下]dddd HH:mm', 
+        lastWeek: 'MM-DD dddd HH:mm', 
+        sameElse: 'YYYY-MM-DD HH:mm' // Everything else ( 17/10/2011 )
+    })
+    return calendarDate;
+}
+
+
+export const calendarFormatBrif = (date) => {
+    const formattedTime = dayjs(date);
+    if(!dayjs().isSame(formattedTime, 'year') ) {
+        return formattedTime.format('YYYY-MM-DD HH:mm');
+    }
+    const calendarDate = dayjs(date).calendar(null, {
+        sameDay: 'HH:mm', 
+        nextDay: '[明天] HH:mm',
+        lastDay: '[昨天] HH:mm',
+        nextWeek: '[下]dddd HH:mm', 
+        lastWeek: 'dddd HH:mm', 
+        sameElse: 'MM-DD HH:mm' // Everything else ( 17/10/2011 )
     })
     return calendarDate;
 }

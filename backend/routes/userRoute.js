@@ -17,7 +17,7 @@ const {
 } = require('../controllers/userController');
 
 const {
-    getUserNewNotifications,
+    getUserNotifications,
 } = require('../controllers/notificationsController');
 
 // middlewares
@@ -28,7 +28,7 @@ router.post("/register", upload.single("picture"), createUser);
 router.post("/login", loginUser);
 router.get("/currentUser", verifyToken, getCurrentUser);
 router.get("/collectedPosts", verifyToken, getCollectedPosts);
-router.get("/newNotifications", verifyToken, getUserNewNotifications);
+router.get("/notifications", verifyToken, getUserNotifications);
 router.get("/:userId/followings", verifyToken, getUserFollowings);
 router.get("/:userId/followers", verifyToken, getUserFollowers);
 router.get("/:userId/profileInfo", verifyToken, getProfileInfo);

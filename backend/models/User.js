@@ -48,7 +48,7 @@ const UserSchema = new Schema({
         type: mongoose.Types.ObjectId,
         ref: "Post"
     } ],
-    newNotifyCount: { 
+    newNotifCount: { 
         type: Number, 
         default: 0 
     },

@@ -1,33 +1,35 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { AppContext } from '../../context/appContext'
-import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
+import { clearUserNotif } from '../../redux/features/authSlice';
+import axios from 'axios';
 import Header from '../Layout/Header';
-import NotificationCard from './NotificationCard';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import SmsOutlinedIcon from '@mui/icons-material/SmsOutlined';
-// import { setUserNotifs } from '../../redux/features/authSlice';
+import NotificationSection from './NotificationSection';
+
 
 const NotificationsFeed = () => {
-    const { notifications, setNotifications } = useContext(AppContext);
-    const { _id, newNotifyCount} = useSelector(state => state.auth.user);
+    const { socket, notifications, setNotifications } = useContext(AppContext);
+    const user = useSelector(state => state.auth.user);
     const [active, setActive] = useState(1);
 
     const dispatch = useDispatch();
 
     useEffect(() => {
-        fetchNewNotifications();
-        // dispatch(setUserNotifs({
-        //     followType: [],
-        //     commentOrLikeType: []
-        // }));
-    }, [_id])
+        socket.emit('read-newNotifications', user?._id);
+        dispatch(clearUserNotif());
+    }, [])
+
+    useEffect(() => {
+        fetchUserNotifications();
+    }, [user._id])
  
-    const fetchNewNotifications = async () => {
+    const fetchUserNotifications = async () => {
         try {
-            const response = await axios.get(`user/newNotifications`);
+            const response = await axios.get(`user/notifications`);
             if(response.data.success) {
-                setNotifications(response.data.newNotifications);
+                setNotifications(response.data.categorizedNotifs);
             }
         } catch(error) {
             console.error('Error fetching notifications:', error);
@@ -36,8 +38,8 @@ const NotificationsFeed = () => {
 
     return (
         <div className='mainWrapper'>
-            <Header withBackward={true} heading='消息通知' subHeading={newNotifyCount} subText='条新消息'>
-                <div className='grid w-full grid-cols-2 h-[40px] cursor-pointer justify-items-center borderBottom'>
+            <Header withBackward={true} heading='消息通知' >
+                <div className='grid w-full grid-cols-2 h-[40px] mt-[-10px] cursor-pointer justify-items-center borderBottom'>
                     <div onClick={() => setActive(1)} className={`w-full normalFlex ${active === 1 ? 'text-mernBlue' : 'text-mernDarkGray'}`}>
                         <span className={`w-[60%] text-[17px] min-w-[140px] h-full normalFlex border-b-2 pb-[2px] transition-colors ease-in ${active === 1 ? 'border-b-mernBlue' : 'border-b-transparent'}`}>
                             <SmsOutlinedIcon className='!text-[18px] !mb-[-2px] !mr-[2px]'/>评论和赞
@@ -52,24 +54,25 @@ const NotificationsFeed = () => {
             </Header>
 
             {active === 1 &&
-            <div className='w-full mt-[4px]'>
-                { notifications?.commentOrLikeType?.length > 0 
-                ? notifications?.commentOrLikeType?.map(notif => <NotificationCard key={notif?._id} notification={notif}/>)
-                : <div className='normalFlex py-[100px]'>无新消息</div>
+                <div className='w-full'>
+                { notifications?.commentOrLikeType?.newNotifs?.length > 0 && 
+                <NotificationSection title='最新' notifs={notifications?.commentOrLikeType?.newNotifs} />
                 }
+                <NotificationSection title='近7天' notifs={notifications?.commentOrLikeType?.sevenDays} />
+                <NotificationSection title='近30天' notifs={notifications?.commentOrLikeType?.thirtyDays} />
             </div>
             }
 
             {active === 2 &&
-            <div className='w-full mt-[4px]'>
-                { notifications?.followType?.length > 0 
-                ? notifications?.followType?.map(notif => <NotificationCard key={notif?._id} notification={notif}/>)
-                : <div className='normalFlex py-[100px]'>无新消息</div>
+            <div className='w-full'>
+                { notifications?.followType?.newNotifs?.length > 0 && 
+                <NotificationSection title='最新' notifs={notifications?.followType?.newNotifs} />
                 }
+                <NotificationSection title='近7天' notifs={notifications?.followType?.sevenDays} />
+                <NotificationSection title='近30天' notifs={notifications?.followType?.thirtyDays} />
             </div>
             }
 
-            <button onClick={() => console.log(notifications)}>click me</button>
         </div>
     )
 }

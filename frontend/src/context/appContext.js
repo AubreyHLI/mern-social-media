@@ -18,7 +18,7 @@ export function AppContextProvider({children}) {
 
     const resetContext = () => {
         setSuggestedUsers([]);
-        setNotifications([]);
+        setNotifications({});
     }
 
     const contextValue = {

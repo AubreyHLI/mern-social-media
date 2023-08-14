@@ -4,11 +4,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setUserCollects } from '../../redux/features/authSlice';
 import { setAPost, setPosts } from '../../redux/features/postsSlice';
 import { AppContext } from '../../context/appContext';
+import { calendarFormat, calendarFormatBrif } from '../../helpers/dayjsHelper';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import SmsOutlinedIcon from '@mui/icons-material/SmsOutlined';
 import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
-import dayjs, { calendarFormat } from '../../helpers/dayjsHelper';
 import TooltipBox from '../atoms/TooltipBox';
 import LikedBtn from '../atoms/LikedBtn';
 import CollectedBtn from '../atoms/CollectedBtn';
@@ -114,7 +114,7 @@ const PostCard = ({post, isPage, navToProfile=true }) => {
 			<div className='section-right'>
 				{/* post user */}
 				<div className='flex justify-between'>
-					<div className={`h-[50px] flex flex-col items-start ${isPage ? 'gap-[4px]' : '480px:flex-row 480px:h-[36px] 480px:items-start' }`}>
+					<div className={`h-[50px] flex flex-col items-start ${isPage ? 'gap-[4px]' : '480px:flex-row 480px:h-[36px] 480px:items-center' }`}>
 						<div className='relative userInfoBox'>
 							<AvatarOrNameBox username={post?.author?.username} userId={post?.author?._id} navToProfile={navToProfile}/>
 						</div>
@@ -124,7 +124,7 @@ const PostCard = ({post, isPage, navToProfile=true }) => {
 							? <span>{calendarFormat(post?.createdAt)}</span> 
 							: <div className='mt-[2px]'>
 								<span className='hidden 480px:inline-block'>·</span>
-								<span>{dayjs(post?.createdAt).fromNow()}</span>
+								<span>{calendarFormatBrif(post?.createdAt)}</span>
 							</div>
 							}
 						</div>
