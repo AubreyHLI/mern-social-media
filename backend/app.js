@@ -19,7 +19,7 @@ app.use(morgan("common"));
 app.use(bodyParser.json({limit: "30mb", extended: true}));
 app.use(bodyParser.urlencoded({limit: "30mb", extended: true}));
 app.use(cors({
-    origin: [process.env.CLIENT_URL_LOCAL, ],
+    origin: [process.env.CLIENT_URL_LOCAL, process.env.CLIENT_URL,],
     credentials: true,
     methods: ['GET', 'POST', 'DELETE', 'PATCH'],
 }));

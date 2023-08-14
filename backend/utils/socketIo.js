@@ -15,7 +15,7 @@ const { Server } = require("socket.io");
 const getIo = (server) => {
     const io = new Server(server, {
         cors: {
-            origin: [process.env.CLIENT_URL_LOCAL, "https://admin.socket.io"],
+            origin: [process.env.CLIENT_URL_LOCAL, process.env.CLIENT_URL, "https://admin.socket.io"],
             methods: ["GET", "POST"],
             credentials: true,
         }
