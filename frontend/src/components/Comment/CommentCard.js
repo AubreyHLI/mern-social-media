@@ -6,6 +6,7 @@ import { calendarFormatBrif } from '../../helpers/dayjsHelper';
 import { useDispatch, useSelector } from 'react-redux';
 import { setPostComments } from '../../redux/features/postsSlice';
 import { AppContext } from '../../context/appContext';
+import { toast } from 'react-toastify';
 
 
 const CommentCard = ({comment, postId, setComments}) => {
@@ -21,10 +22,11 @@ const CommentCard = ({comment, postId, setComments}) => {
 					comments: response.data.updatedComments,
 					postId
 				}));
+				toast.success('评论已删除', { toastId: 'comment-success' });
 			}
 		} catch(error) {
-			if(error.name === 'AxiosError') console.log('error:', error.response.data.message);
-        	else console.log('error:', error.message);
+			const errorMsg = error.name === 'AxiosError' ? error.response.data.message : error.message;
+            toast.error(errorMsg, { toastId: 'comment-error' });
 		}
 	}
 
@@ -58,8 +60,8 @@ const CommentCard = ({comment, postId, setComments}) => {
 				}
             }
         } catch(error) {
-            if(error.name === 'AxiosError') console.log('error:', error.response.data.message);
-            else console.log('error:', error.message);
+            const errorMsg = error.name === 'AxiosError' ? error.response.data.message : error.message;
+            toast.error(errorMsg, { toastId: 'comment-error' });
         }
     }
 

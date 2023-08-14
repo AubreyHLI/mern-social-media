@@ -75,11 +75,11 @@ em-emoji-picker {
 }
 
 .btn-primary {
-    @apply w-full h-[50px] px-[32px] my-[12px] rounded-[40px] text-[16px] font-[600] text-[#fff] bg-mernFont cursor-pointer pointer-events-auto tracking-widest;
+    @apply w-full h-[50px] px-[32px] my-[12px] rounded-[40px] text-[16px] font-[600] text-[#fff] bg-mernFont pointer-events-auto tracking-widest disabled:opacity-75;
 }
 
 .btn-secondary {
-    @apply h-[36px] w-auto px-[16px] rounded-[40px] text-[15px] font-[500] bg-[#fff] text-mernFont border border-[#cccccc]  cursor-pointer pointer-events-auto tracking-widest  hover:opacity-[0.90] transition-all ease-out;
+    @apply h-[36px] w-auto px-[16px] rounded-[40px] text-[15px] font-[500] bg-[#fff] text-mernFont border border-[#cccccc] pointer-events-auto tracking-widest  hover:opacity-[0.90] transition-all ease-out;
 }
 
 .btn-post {

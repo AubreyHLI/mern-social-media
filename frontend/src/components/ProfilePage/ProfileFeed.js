@@ -7,6 +7,8 @@ import ProfileInfo from './ProfileInfo';
 import PostCard from '../Post/PostCard';
 import axios from 'axios';
 import { setUserFollowers, setUserFollowings } from '../../redux/features/authSlice';
+import { toast } from 'react-toastify';
+import LoadingSpinner from '../atoms/LoadingSpinner';
 
 
 const ProfileFeed = () => {
@@ -32,8 +34,8 @@ const ProfileFeed = () => {
                 dispatch( setPosts({ posts: [...response.data.posts] }) )
             }
         } catch(error) {
-            if(error.name === 'AxiosError') console.log('error:', error.response.data.message);
-            else console.log('error:', error.message);
+            const errorMsg = error.name === 'AxiosError' ? error.response.data.message : error.message;
+            toast.error(errorMsg, { toastId: 'fetchPosts-error' });
         }
     }
 
@@ -49,8 +51,8 @@ const ProfileFeed = () => {
                 }
             }
         } catch(error) {
-            if(error.name === 'AxiosError') console.log('error:', error.response.data.message);
-            else console.log('error:', error.message);
+            const errorMsg = error.name === 'AxiosError' ? error.response.data.message : error.message;
+            toast.error(errorMsg, { toastId: 'fetchProfile-error' });
         }
     }
 
@@ -60,17 +62,22 @@ const ProfileFeed = () => {
             <Header withBackward={true} 
                 heading={isUser ? user?.username : profile?.username} 
                 subHeading={profilePosts?.length} />
-
-			<ProfileInfo profile={isUser ? user : profile} />
             
-            <div className='w-full'>
-                <h1 className='w-full border-b-[2px] border-b-mernBorder px-[16px] 1200px:px-[24px] font-[500] text-[18px] pb-[10px]'>
-                    全部内容
-                </h1>
-                { profilePosts?.map(p => 
-                <PostCard key={p?._id} post={p} postId={p?._id} navToProfile={false}/>
-                )} 
-            </div>
+            {profile ? 
+            <>
+                <ProfileInfo profile={isUser ? user : profile} />
+                
+                <div className='w-full'>
+                    <h1 className='w-full border-b-[2px] border-b-mernBorder px-[16px] 1200px:px-[24px] font-[500] text-[18px] pb-[10px]'>
+                        全部内容
+                    </h1>
+                    { profilePosts?.map(p => 
+                    <PostCard key={p?._id} post={p} postId={p?._id} navToProfile={false}/>
+                    )} 
+                </div>
+            </> 
+            : <LoadingSpinner styleOption='mt-[100px]'/>
+            } 
         </div>
     )
 }

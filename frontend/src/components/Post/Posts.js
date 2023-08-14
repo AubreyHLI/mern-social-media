@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { setPosts } from '../../redux/features/postsSlice';
 import PostCard from './PostCard';
+import { toast } from 'react-toastify';
 
 const Posts = () => {
     const posts = useSelector(state => state.posts.posts);   
@@ -20,8 +21,8 @@ const Posts = () => {
                 dispatch( setPosts({ posts: [...response.data.posts] }) )
             }
         } catch(error) {
-            if(error.name === 'AxiosError') console.log('error:', error.response.data.message);
-            else console.log('error:', error.message);
+            const errorMsg = error.name === 'AxiosError' ? error.response.data.message : error.message;
+            toast.error(errorMsg, { toastId: 'fetchPosts-error' });
         }
     }
 

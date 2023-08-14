@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     posts: [],
-    collectedPosts: [],
+    collectedPosts: null,
 };
 
 export const postsSlice = createSlice({
@@ -73,7 +73,7 @@ export const postsSlice = createSlice({
             state.collectedPosts = [...action.payload.collectedPosts];
         },
         resetColloctedPosts: (state, action) => {
-            state.collectedPosts.length = 0
+            state.collectedPosts = null
         },
     }
 })

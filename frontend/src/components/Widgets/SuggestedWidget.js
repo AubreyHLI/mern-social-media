@@ -2,6 +2,7 @@ import React, { useContext, useEffect } from 'react'
 import axios from 'axios';
 import FollowCard from '../Follows/FollowCard';
 import { AppContext } from '../../context/appContext';
+import { toast } from 'react-toastify';
 
 const SuggestedWidget = () => {
 	const { suggestedUsers, setSuggestedUsers } = useContext(AppContext);
@@ -17,8 +18,8 @@ const SuggestedWidget = () => {
 				setSuggestedUsers(response.data.suggestedUsers);
             }
         } catch(error) {
-            if(error.name === 'AxiosError') console.log('error:', error.response.data.message);
-            else console.log('error:', error.message);
+            const errorMsg = error.name === 'AxiosError' ? error.response.data.message : error.message;
+            toast.error(errorMsg, { toastId: 'fetchSuggest-error' });
         }
 	}
 

@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import Tweetbox from '../atoms/Tweetbox';
 import { setPosts } from '../../redux/features/postsSlice';
+import { toast } from 'react-toastify';
 
 const AddPostForm = ({ minH=80, optionStyles, autoFocus=false, handleAfterSuccess=()=>{}}) => {
     const user = useSelector(state => state.auth.user);
@@ -26,10 +27,11 @@ const AddPostForm = ({ minH=80, optionStyles, autoFocus=false, handleAfterSucces
                 dispatch( setPosts({ posts: [...response.data.posts] }) );
                 postFormRef.current.resetPostInput();
                 handleAfterSuccess();
+                toast.success('动态发布成功', { toastId: 'sendPost-success' });
             }
         } catch(error) {
-            if(error.name === 'AxiosError') console.log('error:', error.response.data.message);
-            else console.log('error:', error.message);
+            const errorMsg = error.name === 'AxiosError' ? error.response.data.message : error.message;
+            toast.error(errorMsg, { toastId: 'sendPost-error' });
         }        
     }
 

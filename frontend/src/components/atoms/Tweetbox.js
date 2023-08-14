@@ -74,7 +74,7 @@ const Tweetbox = ({sendForm, chooseAudience, submitBtnText, placeholder, userAva
             <form ref={formRef} className='section-right'>
                 <div>
                     {/* text */}
-                    <div className='ml-[5px] flex'>
+                    <div className='pl-[5px] flex'>
                         <textarea maxLength={wordLimit} required placeholder={placeholder} ref={textareaRef} value={userInput}  onChange={ e => setUserInput(e.target.value)} onKeyUp={handleKeyup}
                             className={`!min-h-[${minH}px] flex-grow break-words text-[18px] font-[400] placeholder:text-[20px] leading-[24px] mt-[10px] mx-[2px] pb-[24px] outline-none border-none resize-none overflow-y-hidden text-mernFont`}
                         />
@@ -98,12 +98,12 @@ const Tweetbox = ({sendForm, chooseAudience, submitBtnText, placeholder, userAva
                 <div className="flex justify-between mt-[12px] ml-[-4px] text-mernBlue">
                     <ul className="list-none flex items-center gap-[8px]">
                         <li>
-                            <TooltipBox tip='Media' Icon={ImageOutlinedIcon} iconStyle='!text-[22px]' handleOnClick={() => filePickerRef.current.click()}/>
+                            <TooltipBox tip='图片' Icon={ImageOutlinedIcon} iconStyle='!text-[22px]' handleOnClick={() => filePickerRef.current.click()}/>
                             <input type='file' ref={filePickerRef} onChange={addImg} className='hidden' />
                         </li>
-                        <li>
+                        {/* <li>
                             <TooltipBox tip='GIF' Icon={GifBoxOutlinedIcon} iconStyle='!text-[22px]' handleOnClick={() => console.log('gif')} />
-                        </li>
+                        </li> */}
                         <li className='relative'>
                             <TooltipBox tip='Emoji' Icon={EmojiEmotionsOutlinedIcon} iconStyle='!text-[22px]' isActive={showEmojis} handleOnClick={() => setShowEmojis(!showEmojis)} />
                             { showEmojis && (
@@ -112,7 +112,7 @@ const Tweetbox = ({sendForm, chooseAudience, submitBtnText, placeholder, userAva
                             </div>) }
                         </li>
                         <li>
-                            <TooltipBox tip='Location' Icon={LocationOnOutlinedIcon} iconStyle='!text-[22px]' handleOnClick={() => console.log('location')} />
+                            <TooltipBox tip='地点' Icon={LocationOnOutlinedIcon} iconStyle='!text-[22px]' handleOnClick={() => console.log('location')} />
                         </li>
                     </ul>
                     <button type="submit" onClick={handleSubmit} className={`btn-submit ${!userInput.trim() && !selectedFile ? 'disabled' : null}`}>

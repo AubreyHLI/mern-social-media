@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import FollowCard from './FollowCard';
 import { useSelector } from 'react-redux';
 import FollowerCard from './FollowerCard';
+import { toast } from 'react-toastify';
 
 const FollowersList = ({setProfileName}) => {
 	const {profileId} = useParams();
@@ -18,8 +19,8 @@ const FollowersList = ({setProfileName}) => {
                 setProfileName(response.data.profilename);
             }
         } catch(error) {
-            if(error.name === 'AxiosError') console.log('error:', error.response.data.message);
-            else console.log('error:', error.message);
+            const errorMsg = error.name === 'AxiosError' ? error.response.data.message : error.message;
+            toast.error(errorMsg, { toastId: 'fetchFollowers-error' });
         }
     }
 

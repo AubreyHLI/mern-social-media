@@ -14,11 +14,11 @@ export const AppContext = React.createContext();
 // assign the Provider to a component
 export function AppContextProvider({children}) {
     const [suggestedUsers, setSuggestedUsers] = useState([]);
-    const [notifications, setNotifications] = useState({});
+    const [notifications, setNotifications] = useState(null);
 
     const resetContext = () => {
         setSuggestedUsers([]);
-        setNotifications({});
+        setNotifications(null);
     }
 
     const contextValue = {

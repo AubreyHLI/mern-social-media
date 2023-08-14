@@ -52,7 +52,7 @@ const Sidebar = ({active}) => {
         
         <nav className='w-full flex justify-around 480px:flex-col 480px:gap-[2px] 480px:items-center 480px:mt-[20px] 600px:items-start 1200px:w-[220px] 1200px:ml-[12px] 1200px:mr-[20px]'>
             <SidebarOption label='首页' Icon={HomeOutlinedIcon} isActive={active === 1} path='/' />
-            <SidebarOption label='探索' Icon={SearchOutlinedIcon} isActive={active === 2} path='/Explore' />
+            <SidebarOption label='探索' Icon={SearchOutlinedIcon} isActive={active === 2} path='#' />
             {/* <SidebarOption label='私信' Icon={MailOutlineIcon} isActive={active === 3} isHidden={true} path='#'/> */}
             <button onClick={() => setOpenNewPost(true)} className='btn-post 480px:!hidden'>
                 <AddIcon />

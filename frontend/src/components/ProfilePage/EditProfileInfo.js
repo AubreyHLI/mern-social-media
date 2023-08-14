@@ -10,6 +10,8 @@ import TooltipBox from '../atoms/TooltipBox';
 import Input from '../atoms/Input';
 import * as yup from "yup";
 import axios from 'axios';
+import { toast } from 'react-toastify';
+import LoadingSpinner from '../atoms/LoadingSpinner';
 
 
 const editSchema = yup.object().shape({
@@ -19,6 +21,7 @@ const editSchema = yup.object().shape({
 
 
 const EditProfileInfo = ({setOpen}) => {
+    const [isLoading, setIsLoading] = useState(false);
     const [cover, setCover] = useState(null);
     const [avatar, setAvatar] = useState(null);
     const [email, setEmail] = useState('');
@@ -60,6 +63,7 @@ const EditProfileInfo = ({setOpen}) => {
     const handleChangeProfile = async (e) => {
         e.preventDefault();
         try {
+            setIsLoading(true);
             const validValuesObj = await editSchema.validate({
                 username: username,
                 location: location,
@@ -78,11 +82,14 @@ const EditProfileInfo = ({setOpen}) => {
             if(response.data.success) {
                 dispatch( setUser({ user: response.data.updatedUser }) );
                 dispatch( setSomePosts({ profile: response.data.updatedUser }) );
+                setIsLoading(false);
+                toast.success('资料更新成功', { toastId: 'editProfile-success' });
                 setOpen(false);
             }
         } catch(error) {
-            if(error.name === 'AxiosError') console.log('error:', error.response.data.message);
-            else console.log('error:', error.message);
+            const errorMsg = error.name === 'AxiosError' ? error.response.data.message : error.message;
+            setIsLoading(false);
+            toast.error(errorMsg, { toastId: 'editProfile-error' });
         }
     }
    
@@ -97,8 +104,8 @@ const EditProfileInfo = ({setOpen}) => {
                         </div>
                         <h1 className='font-[500] text-[20px]'>编辑个人资料</h1>
                     </div>
-                    <button onClick={(e) => handleChangeProfile(e)} className='btn-secondary !text-[#fff] !bg-mernFont'>
-                        保存
+                    <button onClick={(e) => handleChangeProfile(e)} className='btn-secondary !text-[#fff] !bg-mernFont' disabled={isLoading}>
+                        {isLoading ? <><LoadingSpinner styleOption='!w-[12px] !h-[12px] mr-[4px] border-[2px]'/>保存中</> : <>保存</> }
                     </button>
                 </div>
 

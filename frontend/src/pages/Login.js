@@ -6,6 +6,7 @@ import * as yup from "yup";
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setLogin } from '../redux/features/authSlice';
+import { toast } from 'react-toastify';
 
 
 const loginSchema = yup.object().shape({
@@ -15,6 +16,7 @@ const loginSchema = yup.object().shape({
 
 
 const Login = () => {
+    const [isLoading, setIsLoading] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
@@ -26,6 +28,7 @@ const Login = () => {
 
     const handleLogin = async () => {
         try{
+            setIsLoading(true);
             // check validity
             const validValuesObj = await loginSchema.validate({
                 email: email,
@@ -36,11 +39,14 @@ const Login = () => {
             );
             if(loginResponse.data.success) {
                 dispatch( setLogin({ token: loginResponse.data.token }) );
+                setIsLoading(false);
+                toast.success('登录成功！', { toastId: 'login-success' });
                 navigate('/');
             }
         } catch(error) {
-            if(error.name === 'AxiosError') console.log('error:', error.response.data.message);
-            else console.log('error:', error.message);
+            const errorMsg = error.name === 'AxiosError' ? error.response.data.message : error.message;
+            setIsLoading(false);
+            toast.error(errorMsg, { toastId: 'login-error' });
         }
     }
 

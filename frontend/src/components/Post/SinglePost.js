@@ -6,6 +6,8 @@ import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { setAPost } from '../../redux/features/postsSlice';
 import { useLocation } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import LoadingSpinner from '../atoms/LoadingSpinner';
 
 
 const SinglePost = ({postId}) => {
@@ -44,8 +46,8 @@ const SinglePost = ({postId}) => {
                 dispatch( setAPost({ post: response.data.post }) );
             }
         } catch(error) {
-			if(error.name === 'AxiosError') console.log('error:', error.response.data.message);
-            else console.log('error:', error.message);
+            const errorMsg = error.name === 'AxiosError' ? error.response.data.message : error.message;
+            toast.error(errorMsg, { toastId: 'fetchPost-error' });
 		}
     }
 
@@ -57,13 +59,13 @@ const SinglePost = ({postId}) => {
                 setCommentsLoading(false);
             }
         } catch(error) {
-			if(error.name === 'AxiosError') console.log('error:', error.response.data.message);
-            else console.log('error:', error.message);
+            const errorMsg = error.name === 'AxiosError' ? error.response.data.message : error.message;
+            toast.error(errorMsg, { toastId: 'fetchComment-error' });
 		}
     }
     
     if(!post) {
-        return <div>Loading...</div>
+        return <LoadingSpinner styleOption='mt-[100px]'/>
     }
 
     return (
@@ -87,7 +89,7 @@ const SinglePost = ({postId}) => {
                     )}
                 </div>
             </div> 
-            : <div>Loading...</div>
+            : <LoadingSpinner styleOption='mt-[100px]'/>
             }
         </div>
     )

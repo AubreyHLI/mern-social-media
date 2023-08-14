@@ -7,6 +7,8 @@ import Header from '../Layout/Header';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import SmsOutlinedIcon from '@mui/icons-material/SmsOutlined';
 import NotificationSection from './NotificationSection';
+import { toast } from 'react-toastify';
+import LoadingSpinner from '../atoms/LoadingSpinner';
 
 
 const NotificationsFeed = () => {
@@ -32,7 +34,8 @@ const NotificationsFeed = () => {
                 setNotifications(response.data.categorizedNotifs);
             }
         } catch(error) {
-            console.error('Error fetching notifications:', error);
+            const errorMsg = error.name === 'AxiosError' ? error.response.data.message : error.message;
+            toast.error(errorMsg, { toastId: 'fetchNotifs-error' });
         }
     }
 
@@ -53,25 +56,29 @@ const NotificationsFeed = () => {
                 </div>
             </Header>
 
-            {active === 1 &&
-                <div className='w-full'>
-                { notifications?.commentOrLikeType?.newNotifs?.length > 0 && 
-                <NotificationSection title='最新' notifs={notifications?.commentOrLikeType?.newNotifs} />
+            { notifications ? 
+            <>
+                { active === 1 &&
+                    <div className='w-full'>
+                    { notifications?.commentOrLikeType?.newNotifs?.length > 0 && 
+                    <NotificationSection title='最新' notifs={notifications?.commentOrLikeType?.newNotifs} />
+                    }
+                    <NotificationSection title='近7天' notifs={notifications?.commentOrLikeType?.sevenDays} />
+                    <NotificationSection title='近30天' notifs={notifications?.commentOrLikeType?.thirtyDays} />
+                </div>
                 }
-                <NotificationSection title='近7天' notifs={notifications?.commentOrLikeType?.sevenDays} />
-                <NotificationSection title='近30天' notifs={notifications?.commentOrLikeType?.thirtyDays} />
-            </div>
-            }
 
-            {active === 2 &&
-            <div className='w-full'>
-                { notifications?.followType?.newNotifs?.length > 0 && 
-                <NotificationSection title='最新' notifs={notifications?.followType?.newNotifs} />
+                {active === 2 &&
+                <div className='w-full'>
+                    { notifications?.followType?.newNotifs?.length > 0 && 
+                    <NotificationSection title='最新' notifs={notifications?.followType?.newNotifs} />
+                    }
+                    <NotificationSection title='近7天' notifs={notifications?.followType?.sevenDays} />
+                    <NotificationSection title='近30天' notifs={notifications?.followType?.thirtyDays} />
+                </div>
                 }
-                <NotificationSection title='近7天' notifs={notifications?.followType?.sevenDays} />
-                <NotificationSection title='近30天' notifs={notifications?.followType?.thirtyDays} />
-            </div>
-            }
+            </>
+            : <LoadingSpinner styleOption='mt-[100px]'/>}
 
         </div>
     )

@@ -2,8 +2,10 @@ import React, { useContext, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { setUser } from '../redux/features/authSlice';
-import axios from 'axios';
 import { AppContext } from '../context/appContext';
+import { toast } from 'react-toastify';
+import axios from 'axios';
+import LoadingCover from '../components/atoms/LoadingCover';
 
 
 const AuthProtectedRoute = ({children}) => {
@@ -28,8 +30,8 @@ const AuthProtectedRoute = ({children}) => {
                 socket.emit('new-conUser', response.data.user._id);
             }
         } catch(error) {
-            if(error.name === 'AxiosError') console.log('error:', error.response.data.message);
-            else console.log('error:', error.message);
+            const errorMsg = error.name === 'AxiosError' ? error.response.data.message : error.message;
+            toast.error(errorMsg, { toastId: 'fetchUser-error' });
             navigate('/login');
         } finally {
             setIsLoading(false);
@@ -42,7 +44,7 @@ const AuthProtectedRoute = ({children}) => {
     
     return (
         isLoading 
-        ? <div>Loading ... </div> 
+        ? <LoadingCover />
         : children       
     );
 

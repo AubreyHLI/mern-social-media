@@ -6,6 +6,7 @@ import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
 import PersonRemoveAlt1OutlinedIcon from '@mui/icons-material/PersonRemoveAlt1Outlined';
 import axios from 'axios';
 import TooltipBox from '../atoms/TooltipBox';
+import { toast } from 'react-toastify';
 
 const FollowBtn = ({postUserId, isSmall}) => {
     const { socket } = useContext(AppContext);
@@ -29,8 +30,8 @@ const FollowBtn = ({postUserId, isSmall}) => {
                 }
             }
         } catch(error) {
-            if(error.name === 'AxiosError') console.log('error:', error.response.data.message);
-            else console.log('error:', error.message);
+            const errorMsg = error.name === 'AxiosError' ? error.response.data.message : error.message;
+            toast.error(errorMsg, { toastId: 'follow-error' });
         }
     }
     

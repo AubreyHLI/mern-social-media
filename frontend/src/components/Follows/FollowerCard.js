@@ -4,6 +4,7 @@ import AvatarOrNameBox from '../atoms/AvatarOrNameBox'
 import { useDispatch } from 'react-redux'
 import axios from 'axios'
 import { setUserFollowers } from '../../redux/features/authSlice'
+import { toast } from 'react-toastify'
 
 const FollowerCard = ({profile}) => {
     const [isRemoved, setIsRemoved] = useState(false);
@@ -19,8 +20,8 @@ const FollowerCard = ({profile}) => {
 				setIsRemoved(true)
             }
         } catch(error) {
-            if(error.name === 'AxiosError') console.log('error:', error.response.data.message);
-            else console.log('error:', error.message);
+            const errorMsg = error.name === 'AxiosError' ? error.response.data.message : error.message;
+            toast.error(errorMsg, { toastId: 'follow-error' });
         }
 	}
 

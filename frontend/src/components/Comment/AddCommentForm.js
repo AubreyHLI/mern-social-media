@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import CloseIcon from '@mui/icons-material/Close';
 import Tweetbox from '../atoms/Tweetbox';
 import axios from 'axios';
@@ -7,6 +7,7 @@ import { Avatar } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { setAPost } from '../../redux/features/postsSlice';
 import { AppContext } from '../../context/appContext';
+import { toast } from 'react-toastify';
 
 const AddCommentForm = ({postId, setOpen}) => {
     const commentFormRef = useRef();
@@ -27,9 +28,7 @@ const AddCommentForm = ({postId, setOpen}) => {
         formData.append("commentText", commentText);
         if(commentImg) formData.append("picture", commentImg);
         try{
-            const response = await axios.post(`post/${postId}/createComment`, 
-                formData
-            );
+            const response = await axios.post(`post/${postId}/createComment`, formData);
             if(response.data.success) {
                 dispatch( setAPost({ post: response.data.updatedPost }) );
                 socket.emit('send-notification', {
@@ -43,19 +42,19 @@ const AddCommentForm = ({postId, setOpen}) => {
                     },
                     commentContent: response.data.newComment,
                 });
+                toast.success('评论发表成功', { toastId: 'comment-success' });
                 setOpen(false);
             }
         } catch(error) {
-            if(error.name === 'AxiosError') console.log('error:', error.response.data.message);
-            else console.log('error:', error.message);
+            const errorMsg = error.name === 'AxiosError' ? error.response.data.message : error.message;
+            toast.error(errorMsg, { toastId: 'comment-error' });
         }
     }
 
 
     return (
-        <div className='fixed z-[200] inset-0 w-full h-screen min-w-[350px] overflow-auto bg-[rgba(0,0,0,0.4)] flex justify-center'>
+        <div className='fixed z-[200] inset-0 w-full h-screen min-w-[350px] overflow-auto bg-[rgba(0,0,0,0.4)] flex justify-center'>            
             <div className='w-full h-full bg-white flex flex-col pt-[4px] pb-[24px] px-[8px] overflow-scroll 480px:mt-[100px] 480px:w-[90%] 480px:max-w-[700px] 480px:h-max 480px:max-h-[650px] 480px:rounded-[16px] 480px:px-[16px] 480px:overflow-visible'>
-                
                 <div className='w-full flex items-center gap-[20px] py-[5px]'>
                     <div onClick={() => setOpen(false)} className='w-[34px] h-[34px] rounded-[50%] normalFlex cursor-pointer transition-colors duration-200 ease-out hover:bg-mernBorder'>
                         <CloseIcon fontSize='medium'/>

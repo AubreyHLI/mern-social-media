@@ -3,20 +3,23 @@ import logo from "../assets/mern-social-media-high-resolution-logo-color-on-tran
 import AddIcon from '@mui/icons-material/Add';
 import { Avatar } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import * as yup from "yup";
 import axios from "axios";
 import Input from '../components/atoms/Input';
+import LoadingSpinner from '../components/atoms/LoadingSpinner';
 
 const registerSchema = yup.object().shape({
-    username: yup.string().required("用户名不能为空"),
-    email: yup.string().email("邮箱格式填写错误").required("请填写电子邮箱"),
-    password: yup.string().required("密码不能为空").min(6, "密码不能少于6个字符"),
-    location: yup.string().required("请填写所在地"),
     picture: yup.string().required("请上传头像图片"),
+    location: yup.string().required("请填写所在地"),
+    password: yup.string().required("密码不能为空").min(6, "密码不能少于6个字符"),
+    email: yup.string().email("邮箱格式填写错误").required("请填写电子邮箱"),
+    username: yup.string().required("用户名不能为空"),
 })
 
 
 const Signup = () => {
+    const [isLoading, setIsLoading] = useState(false);
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -46,7 +49,7 @@ const Signup = () => {
         if (password !== '' && confirmedPW !== ''){
           if (password !== confirmedPW ) {
             isValid = false;
-            alert('Passwords does not match 密码不一致')
+            toast.error('密码与确认密码不一致，请重新填写');
           }
         }
         return isValid;
@@ -56,12 +59,13 @@ const Signup = () => {
     const handleSignup = async () => {
         if(validatePassword()){
             try {
+                setIsLoading(true);
                 const validValuesObj = await registerSchema.validate({
-                    username: username,
-                    email: email,
-                    password: password,
+                    picture: avatar,
                     location: location,
-                    picture: avatar
+                    password: password,
+                    email: email,
+                    username: username,
                 });
                 const newFormData = new FormData();
                 for(let value in validValuesObj) {
@@ -71,11 +75,14 @@ const Signup = () => {
 
                 const signupResponse = await axios.post(`user/register`, newFormData );
                 if(signupResponse.data.success) {
+                    toast.success('注册成功，请登录该账号！', { toastId: 'signup-success' });
+                    setIsLoading(false);
                     navigate('/login');
                 }
             } catch(error) {
-                if(error.name === 'AxiosError') console.log('error:', error.response.data.message);
-                else console.log('error:', error.message);
+                const errorMsg = error.name === 'AxiosError' ? error.response.data.message : error.message;
+                toast.error(errorMsg, { toastId: 'signup-error' });
+                setIsLoading(false);
             }
         }
     }
@@ -104,7 +111,12 @@ const Signup = () => {
                         <Input type='text' id='location' inputName='location' placeholder='地区' inputValue={location} setInputValue={setLocation} wordLimit={50}/>
                     </div>
                 </form>
-                <button className='btn-primary' onClick={handleSignup}>注册</button>
+                <button className='btn-primary' onClick={handleSignup} disabled={isLoading}>
+                    {isLoading 
+                    ? <div className='normalFlex gap-[5px]'><LoadingSpinner styleOption='!w-[16px] !h-[16px]' />注册中</div>
+                    : '注册' }
+                </button>
+               
                 <div className='text-center py-[16px] text-[rgb(147,145,145)]'>
                     <p>Already have an account ?<Link to='/login' className='switch-link'>登陆已有账号</Link></p>
                 </div>
