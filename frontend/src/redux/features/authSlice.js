@@ -49,7 +49,7 @@ export const authSlice = createSlice({
         },
         clearUserNotif: (state, action) => {
             if(state.user) {
-                state.user.newNotifCount = [];
+                state.user.newNotifCount = 0;
             } else {
                 console.log("User non-existent :(");
             }

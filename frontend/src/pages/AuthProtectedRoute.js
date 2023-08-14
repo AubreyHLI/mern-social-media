@@ -30,8 +30,8 @@ const AuthProtectedRoute = ({children}) => {
                 socket.emit('new-conUser', response.data.user._id);
             }
         } catch(error) {
-            const errorMsg = error.name === 'AxiosError' ? error.response.data.message : error.message;
-            toast.error(errorMsg, { toastId: 'fetchUser-error' });
+            // const errorMsg = error.name === 'AxiosError' ? error.response.data.message : error.message;
+            toast.error(error, { toastId: 'fetchUser-error' });
             navigate('/login');
         } finally {
             setIsLoading(false);
