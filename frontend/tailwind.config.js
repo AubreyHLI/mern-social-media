@@ -14,7 +14,7 @@ module.exports = {
         "900px": "900px",
         "600px": "600px",
         "480px": "480px",
-        "400px": "400px",
+        "320px": "320px",
       },
       transitionProperty: {
         'underline': 'underline',
