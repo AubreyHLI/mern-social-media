@@ -3,23 +3,22 @@ const User = require('../models/User');
 const Comment = require('../models/Comment');
 const asyncHandler = require("../middlewares/asyncHandler");
 const CustomErrorClass = require("../utils/CustomErrorClass");
-const { uploadToCloudinary } = require("../utils/cloudinary");
+const { uploadToCloudinary, removeFromCloudinary } = require("../utils/cloudinary");
 const path = require('path');
 
 // Comments
 const createComment = asyncHandler( async(req, res, next) => {
     try {
         const { postId } = req.params;
-        const { commentText } = req.body;
+        const { commentText, picture } = req.body;
 
         const newComment = new Comment({
             author: Object(req.user.id),
             postId,
             commentText,
         });
-        if(req.file) {
-            const fileLocalUrl = path.join(req.file.path);
-            const cloudinaryResult = await uploadToCloudinary(fileLocalUrl, `comments/${postId}`, 400); 
+        if(picture) {
+            const cloudinaryResult = await uploadToCloudinary(picture, `comments/${postId}`, 400); 
             newComment.commentPicture = cloudinaryResult.image;
         }
         await newComment.save();
@@ -92,8 +91,12 @@ const likeComment = asyncHandler( async(req, res, next) => {
 const deleteComment = asyncHandler( async(req, res, next) => {
     try {
         const { commentId, postId } = req.params;
-        
-        await Comment.findByIdAndDelete(commentId);
+        const comment = await Comment.findByIdAndDelete(commentId);
+
+        if(comment.commentPicture && comment.commentPicture.public_id) {
+            await removeFromCloudinary(comment.commentPicture)
+        }
+
         const updatedPost = await Post.findOneAndUpdate({_id: postId}, {$pull: {comments: commentId}}, { new: true });
 
         res.status(200).json({

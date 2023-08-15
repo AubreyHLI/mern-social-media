@@ -16,13 +16,14 @@ const AddPostForm = ({ minH=80, optionStyles, autoFocus=false, handleAfterSucces
         }
     }, [])
 
-    const handleSendPost = async (postText, postImg) => {
+    const handleSendPost = async (postText, postImgBase64) => {
         const formData = new FormData();
         formData.append("postText", postText);
         formData.append("location", user?.location);
-        if(postImg) formData.append("picture", postImg);
+        console.log('postImgBase64:', postImgBase64);
+        if(postImgBase64) formData.append("picture", postImgBase64);
         try{
-            const response = await axios.post('post/createPost', formData );
+            const response = await axios.post('post/createPost', formData);
             if(response.data.success) {
                 dispatch( setPosts({ posts: [...response.data.posts] }) );
                 postFormRef.current.resetPostInput();

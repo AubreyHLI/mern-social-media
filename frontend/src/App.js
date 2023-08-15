@@ -25,6 +25,7 @@ function App() {
 	const token = useSelector(state => state.auth.token);
 	axios.defaults.baseURL = `${SERVER_URL}/`;
 	axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+	// axios.defaults.headers.common["Content-Type"]
 	axios.defaults.withCredentials = true;
 
 

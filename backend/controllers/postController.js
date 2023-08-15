@@ -9,17 +9,15 @@ const path = require('path');
 // CREATE
 const createPost = asyncHandler( async(req, res, next) => {
     try {
-        const { postText, location } = req.body;     
+        const { postText, location, picture } = req.body;     
         const newPost = new Post({
             author: req.user.id,
             location,
             postText,
             likes: {},            
         });
-        if(req.file) {
-            console.log('req.file:', req.rile);
-            const fileLocalUrl = req.file.path;
-            const cloudinaryResult = await uploadToCloudinary(fileLocalUrl, `posts/${req.user.id}`, 800); 
+        if(picture) {
+            const cloudinaryResult = await uploadToCloudinary(picture, `posts/${req.user.id}`, 800); 
             newPost.postPicture = cloudinaryResult.image;
         }
         await newPost.save();

@@ -19,31 +19,26 @@ const getThumbnail = (originalUrl) => {
 }
 
 // upload file to cloudinary 
-async function uploadToCloudinary(locaFilePath, subFolderName, width) {
-    return cloudinary.uploader
-        .upload(locaFilePath, { 
+async function uploadToCloudinary(base64File, subFolderName, width) {
+    return new Promise((resolve, reject) => {
+        cloudinary.uploader.upload(base64File, { 
             folder: `mern-socialmedia/${subFolderName}`,
             width: width
-        })
-        .then(result => {
-            // Image has been successfully uploaded on cloudinary, so remove local image file 
-            fs.unlinkSync(locaFilePath);
-            return {
-                message: "Success",
-                image: {
-                    url: result.secure_url,
-                    public_id: result.public_id,
-                    thumbnail: getThumbnail(result.secure_url)
-                },
+        }, (error, result) => {
+            if(result && result.secure_url) {
+                return resolve({
+                    image: {
+                        url: result.secure_url,
+                        public_id: result.public_id,
+                        thumbnail: getThumbnail(result.secure_url)
+                    }
+                });
+            } else {
+                console.log(error.message);
+                reject({ message: error.message });
             }
         })
-        .catch(error => {
-            // Remove file from local uploads folder
-            fs.unlinkSync(locaFilePath);
-            return { 
-                message: "Fail",
-            }
-        })  
+    })
 }
 
 

@@ -1,15 +1,17 @@
 import React, { useImperativeHandle, useRef, useState } from 'react';
 import { Avatar } from '@mui/material';
+import { converBase64 } from '../../helpers/imageUploadHelper';
 import PublicOutlinedIcon from '@mui/icons-material/PublicOutlined';
 import ImageOutlinedIcon from '@mui/icons-material/ImageOutlined';
 import GifBoxOutlinedIcon from '@mui/icons-material/GifBoxOutlined';
 import EmojiEmotionsOutlinedIcon from '@mui/icons-material/EmojiEmotionsOutlined';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
+import CloseIcon from '@mui/icons-material/Close';
 import data from '@emoji-mart/data';
 import Picker from '@emoji-mart/react';
 import i18n from '@emoji-mart/data/i18n/zh.json';
 import TooltipBox from './TooltipBox';
-import FilePickerWrapper from './FilePickerWrapper';
+
 
 const Tweetbox = ({sendForm, chooseAudience, submitBtnText, placeholder, userAvatar, wordLimit, minH=80, optionStyles}, formRef) => {
     const [userInput, setUserInput] = useState("");
@@ -49,11 +51,16 @@ const Tweetbox = ({sendForm, chooseAudience, submitBtnText, placeholder, userAva
         let emoji = String.fromCodePoint(...codesArray);
         setUserInput(prevInput => prevInput + emoji);
     }
-
     
-    const addImg = e => {
+    const addImg = async (e) => {
         const file = e.target.files[0];
-        setSelectedFile(file);
+        const base64 = await converBase64(file);
+        setSelectedFile(base64);
+    }
+
+    const removeImg = () => {
+        setSelectedFile(null);
+        filePickerRef.current.value = null;
     }
 
     const handleSubmit = e => {
@@ -82,7 +89,10 @@ const Tweetbox = ({sendForm, chooseAudience, submitBtnText, placeholder, userAva
 
                     {/* image */}
                     { selectedFile && 
-                    <FilePickerWrapper selectedFile={selectedFile} setSelectedFile={setSelectedFile}/> }
+                    <div className='relative'>
+                        <div onClick={removeImg} className='btn-close'><CloseIcon fontSize='sm' /></div>
+                        <img src={selectedFile ? selectedFile : ''} alt="" className='rounded-[20px] max-h-[80px] object-contain'/>
+                    </div> }
                     
                     {/* private or public */}
                     { chooseAudience && 
@@ -106,10 +116,10 @@ const Tweetbox = ({sendForm, chooseAudience, submitBtnText, placeholder, userAva
                         </li> */}
                         <li className='relative'>
                             <TooltipBox tip='Emoji' Icon={EmojiEmotionsOutlinedIcon} iconStyle='!text-[22px]' isActive={showEmojis} handleOnClick={() => setShowEmojis(!showEmojis)} />
-                            { showEmojis && (
+                            { showEmojis && 
                             <div className='absolute top-[100%] mt-[2px] ml-[-100px] w-fit z-[10] border-2 rounded-[10px]'>
                                 <Picker data={data} i18n={i18n} searchPosition='none' onEmojiSelect={addEmoji} previewPosition='none' navPosition='top' maxFrequentRows='2'/>
-                            </div>) }
+                            </div>}
                         </li>
                         <li>
                             <TooltipBox tip='地点' Icon={LocationOnOutlinedIcon} iconStyle='!text-[22px]' handleOnClick={() => console.log('location')} />
