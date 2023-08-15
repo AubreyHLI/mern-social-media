@@ -24,7 +24,7 @@ const {
 const { upload } = require('../middlewares/multer');
 const { verifyToken } = require('../middlewares/auth');
 
-router.post("/register", upload.single("picture"), createUser);
+router.post("/register", upload.none(), createUser);
 router.post("/login", loginUser);
 router.get("/currentUser", verifyToken, getCurrentUser);
 router.get("/collectedPosts", verifyToken, getCollectedPosts);
@@ -32,10 +32,7 @@ router.get("/notifications", verifyToken, getUserNotifications);
 router.get("/:userId/followings", verifyToken, getUserFollowings);
 router.get("/:userId/followers", verifyToken, getUserFollowers);
 router.get("/:userId/profileInfo", verifyToken, getProfileInfo);
-router.patch("/editProfileInfo", verifyToken, upload.fields([
-    {name: "avatar", maxCount: 1},
-    {name: "cover", maxCount:1}
-]), updateUserInfo);
+router.patch("/editProfileInfo", verifyToken, upload.none(), updateUserInfo);
 router.patch("/followings/:followingId", verifyToken, addOrRemoveFollowing);
 router.patch("/followers/remove/:followerId", verifyToken, removeFollower);
 router.get("/suggestedUsers", verifyToken, generateSuggestedUsers);

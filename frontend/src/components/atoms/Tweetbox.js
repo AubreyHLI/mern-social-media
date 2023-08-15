@@ -71,7 +71,6 @@ const Tweetbox = ({sendForm, chooseAudience, submitBtnText, placeholder, userAva
         sendForm(userInput.trim(), selectedFile);
     }
 
-  
 
     return (
         <div className={`sectionWrapper ${isLoading && 'disabled'} ${optionStyles}`} >

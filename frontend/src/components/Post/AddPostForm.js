@@ -20,7 +20,6 @@ const AddPostForm = ({ minH=80, optionStyles, autoFocus=false, handleAfterSucces
         const formData = new FormData();
         formData.append("postText", postText);
         formData.append("location", user?.location);
-        console.log('postImgBase64:', postImgBase64);
         if(postImgBase64) formData.append("picture", postImgBase64);
         try{
             const response = await axios.post('post/createPost', formData);

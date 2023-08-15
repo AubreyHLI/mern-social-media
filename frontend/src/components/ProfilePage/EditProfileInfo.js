@@ -12,6 +12,7 @@ import * as yup from "yup";
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import LoadingSpinner from '../atoms/LoadingSpinner';
+import { converBase64 } from '../../helpers/imageUploadHelper';
 
 
 const editSchema = yup.object().shape({
@@ -45,9 +46,10 @@ const EditProfileInfo = ({setOpen}) => {
         coverFilePickerRef.current.click();
     }
 
-    const addCover = e => {
-        const file = e.target.files[0];
-        setCover(file);
+    const addCover = async (e) => {
+        const file = e.target.files[0];      
+        const base64 = await converBase64(file);
+        setCover(base64);
     }
 
     const clickUploadAvatar = e => {
@@ -55,9 +57,10 @@ const EditProfileInfo = ({setOpen}) => {
         avatarFilePickerRef.current.click();
     }
 
-    const addUserAvatar = e => {
+    const addUserAvatar = async (e) => {
         const file = e.target.files[0];
-        setAvatar(file);
+        const base64 = await converBase64(file);
+        setAvatar(base64);
     }
 
     const handleChangeProfile = async (e) => {
@@ -114,7 +117,7 @@ const EditProfileInfo = ({setOpen}) => {
                     <div className='relative mx-[-10px]'>
                         <div className='brightness-75'>
                             <div className='h-[120px] 600px:h-[200px] bg-[#e5e5e5]'>
-                                <Cover coverImg={cover ? URL.createObjectURL(cover) : user?.coverImage?.url} />
+                                <Cover coverImg={cover ? cover : (user?.coverImage?.url)} />
                             </div>
                         </div>
                         <input type='file' name='cover' ref={coverFilePickerRef} onChange={addCover} className='hidden'/>
@@ -126,7 +129,7 @@ const EditProfileInfo = ({setOpen}) => {
                     
                     <div className='relative mb-[50px]'> 
                         <div className='absolute -top-[45px] 600px:-top-14 border-2 border-[#fff] rounded-full bg-white'>
-                            <Avatar src={avatar ? URL.createObjectURL(avatar) : `${user?.imageUrl?.url}`} alt='' sx={{ width: 100, height: 100 }} className='border-2 brightness-90'/>
+                            <Avatar src={avatar ? avatar : (user?.imageUrl?.url) } alt='' sx={{ width: 100, height: 100 }} className='border-2 brightness-90'/>
                             <input type='file' name='picture' ref={avatarFilePickerRef} onChange={addUserAvatar} className='hidden'/>
                             <span className='absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]'>
                                 <TooltipBox Icon={AddAPhotoIcon} handleOnClick={clickUploadAvatar} tip='修改头像' option='hover-div:bg-mernBorder child:bg-white child:opacity-80' iconStyle='!text-[19px]' />

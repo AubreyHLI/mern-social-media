@@ -4,24 +4,16 @@ const User = require("../models/User");
 const asyncHandler = require("../middlewares/asyncHandler");
 const CustomErrorClass = require("../utils/CustomErrorClass");
 const { uploadToCloudinary, removeFromCloudinary } = require("../utils/cloudinary");
-const path = require('path');
-const fs = require('fs');
-const Post = require('../models/Post');
 
 
 // REGISTER
 const createUser = asyncHandler(async (req, res, next) => {
     try {
-        const {username, email, password, location} = req.body;
+        const {username, email, password, location, picture} = req.body;
         const existUser = await User.findOne({ email });
 
         if(existUser) {
-            const filename = req.file.filename;
-            const filePath = `public/assets/${filename}`;
-            fs.unlink(filePath, (err) => {
-                if (err) res.status(500).json({ message: "Error deleting file" });
-            });
-            return next(new CustomErrorClass(400, 'User already exists'));
+            return next(new CustomErrorClass(400, '该邮箱已被注册，请填写新邮箱'));
         }
 
         // else
@@ -37,9 +29,9 @@ const createUser = asyncHandler(async (req, res, next) => {
             followers: [],
             collects: [],
         });
-        if(req.file) {
-            const fileLocalUrl = req.file.path;
-            const cloudinaryResult = await uploadToCloudinary(fileLocalUrl, `avatars/${newUser._id}`, 240); 
+        
+        if(picture) {
+            const cloudinaryResult = await uploadToCloudinary(picture, `avatars/${newUser._id}`, 240); 
             newUser.imageUrl = cloudinaryResult.image;
         }
         await newUser.save();
@@ -225,25 +217,23 @@ const getProfileInfo = asyncHandler(async (req, res, next) => {
 
 const updateUserInfo = asyncHandler(async (req, res, next) => {
     try {
-        const { bio, location, username } = req.body;
+        const { bio, location, username, avatar, cover } = req.body;
         const user = await User.findById(req.user.id);
         user.username = username;
         user.bio = bio;
         user.location = location;
-        if(req.files.avatar){
+        if(avatar){
             if(user.imageUrl && user.imageUrl.public_id) {
                 await removeFromCloudinary(user.imageUrl)
             }
-            const avatarFileLocalUrl = `public/assets/${req.files.avatar[0].filename}`;
-            const cloudinaryResult = await uploadToCloudinary(avatarFileLocalUrl, `avatars/${user._id}`, 240);
+            const cloudinaryResult = await uploadToCloudinary(avatar, `avatars/${user._id}`, 240);
             user.imageUrl = cloudinaryResult.image;
         } 
-        if(req.files.cover) {
+        if(cover) {
             if(user.coverImage && user.coverImage.public_id) {
                 await removeFromCloudinary(user.coverImage)
             }
-            const coverFileLocalUrl = `public/assets/${req.files.cover[0].filename}`;
-            const cloudinaryResult = await uploadToCloudinary(coverFileLocalUrl, `covers/${user._id}`, 800); 
+            const cloudinaryResult = await uploadToCloudinary(cover, `covers/${user._id}`, 800); 
             user.coverImage = cloudinaryResult.image;
         } 
         await user.save();

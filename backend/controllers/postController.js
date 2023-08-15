@@ -1,10 +1,9 @@
 const Post = require('../models/Post');
 const User = require('../models/User');
-const Comment = require('../models/Comment');
 const asyncHandler = require("../middlewares/asyncHandler");
 const CustomErrorClass = require("../utils/CustomErrorClass");
 const { uploadToCloudinary, removeFromCloudinary } = require("../utils/cloudinary");
-const path = require('path');
+
 
 // CREATE
 const createPost = asyncHandler( async(req, res, next) => {
