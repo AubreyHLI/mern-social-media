@@ -16,6 +16,8 @@ const CommentCard = ({comment, postId, setComments}) => {
 
 	const handleDeleteComment = async () => {
 		try{
+			const answer = window.confirm('确认删除此评论？');
+			if(!answer) return
 			const response = await axios.delete(`post/${postId}/${comment?._id}/delete`);
 			if(response.data.success) {
 				dispatch(setPostComments({
