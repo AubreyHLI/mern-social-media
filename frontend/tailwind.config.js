@@ -32,7 +32,8 @@ module.exports = {
         mernLightGray: '#a8a8a8',
         mernDarkGray: '#808080',
         mernModalBg: '#121212a6',
-        mernBgLight: '#94989c1a',      
+        mernBgLight: '#94989c1a',    
+        mernBgDark: '#212e3b12',  
       }
     },
   },

@@ -8,11 +8,15 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import Cover from '../atoms/Cover';
 import EditProfileInfo from './EditProfileInfo';
 import FollowBtn from '../Follows/FollowBtn';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import TooltipBox from '../atoms/TooltipBox';
+import MoreModal from '../Sidebar/MoreModal';
 
 
 const ProfileInfo = ({profile}) => {
     const user = useSelector(state => state.auth.user);
     const [open, setOpen] = useState(false);
+    const [openMore, setOpenMore] = useState(false);
 
     return (
     <div className='w-full'>
@@ -29,12 +33,17 @@ const ProfileInfo = ({profile}) => {
             
             <div className='mt-[12px]'>
                 {user?._id === profile?._id
-                ? <div>
+                ? <div className='normalFlex gap-[10px]'>
                         <button onClick={() => setOpen(true)} className='btn-secondary hover:!bg-mernBorder'>
                             设置个人资料
                         </button>
-                        {open && 
-                        <EditProfileInfo setOpen={setOpen} />}
+                        {open && <EditProfileInfo setOpen={setOpen} />}
+
+                        <div className='cursor-pointer relative'>
+                            <TooltipBox tip='更多' Icon={MoreHorizIcon} option={'hover-div:bg-mernBgDark'} handleOnClick={() => setOpenMore(prev => !prev)}/>
+
+                            {openMore && <div className='absolute z-[201] left-[-75px] top-[45px]' ><MoreModal type='small' /></div>}
+                        </div>
                     </div>
                 : <FollowBtn postUserId={profile?._id} /> 
                 }

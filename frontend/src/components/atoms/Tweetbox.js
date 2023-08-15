@@ -116,8 +116,8 @@ const Tweetbox = ({sendForm, chooseAudience, submitBtnText, placeholder, userAva
                         <li className='relative'>
                             <TooltipBox tip='Emoji' Icon={EmojiEmotionsOutlinedIcon} iconStyle='!text-[22px]' isActive={showEmojis} handleOnClick={() => setShowEmojis(!showEmojis)} />
                             { showEmojis && 
-                            <div className='absolute top-[100%] mt-[2px] ml-[-100px] w-fit z-[10] border-2 rounded-[10px]'>
-                                <Picker data={data} i18n={i18n} searchPosition='none' onEmojiSelect={addEmoji} previewPosition='none' navPosition='top' maxFrequentRows='2'/>
+                            <div className='absolute top-[100%] mt-[2px] ml-[-40px] w-fit z-[10] border-2 rounded-[10px]'>
+                                <Picker data={data} i18n={i18n} searchPosition='none' onEmojiSelect={addEmoji} previewPosition='none' navPosition='top' maxFrequentRows='2' perLine='8'/>
                             </div>}
                         </li>
                         <li>

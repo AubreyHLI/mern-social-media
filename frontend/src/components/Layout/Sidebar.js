@@ -41,8 +41,7 @@ const Sidebar = ({active}) => {
 
 
   return (
-    <div className='relative w-full p-[4px] flex flex-col items-center bg-[rgba(246,248,248)] backdrop-blur-[10px] 
-        480px:bg-[#fff] 480px:mt-[20px] 480px:backdrop-blur-none 480px:h-full 480px:min-h-[580px] 480px:w-[80px] 480px:py-[12px] 480px:px-[8px]
+    <div className='relative w-full px-[4px] pt-[8px] h-full flex flex-col items-center bg-[rgba(246,248,248)] backdrop-blur-[10px] 480px:bg-[#fff] 480px:mt-[20px] 480px:backdrop-blur-none 480px:h-full 480px:min-h-[580px] 480px:w-[80px] 480px:py-[12px] 480px:px-[8px]
         600px:w-[150px] 1200px:w-[270px] 1200px:items-start'>
         
         <Link to='/'>
@@ -70,17 +69,19 @@ const Sidebar = ({active}) => {
         
 
         <div ref={menuRef} className='hidden cursor-pointer 480px:block 480px:relative 480px:mt-auto 480px:mb-8px 600px:w-full 1200px:w-[220px] 1200px:ml-[12px] 1200px:mr-[20px]'>
-            <div onClick={() => setOpenMore(prev => !prev)} className='w-fit p-[8px] transition-all ease-out rounded-[30px] mb-[2px] hover:bg-[#212e3b12] 480px:p-[12px] 480px:w-full'>
-                <div className="flex items-center justify-start">
+            <div onClick={() => setOpenMore(prev => !prev)} className='w-fit p-[8px] transition-all ease-out rounded-[30px] mb-[2px] hover:bg-mernBgDark 480px:p-[12px] 480px:w-full 600px:px-[16px]'>
+                <div className="flex items-center justify-start gap-[12px] 1200px:gap-[16px]">
                     <MoreHorizIcon className="icon"/>
-                    <h2 className='ml-[12px] text-[18px] font-[500] hidden transition-all duration-200 ease-out 600px:inline'>
+                    <h2 className='text-[18px] font-[500] hidden transition-all duration-200 ease-out 600px:inline'>
                         更多
                     </h2>
                 </div>
             </div>
         </div>
 
-        {openMore && <MoreModal />}
+        <div className='absolute bottom-[75px] left-[10px] z-[101] w-[56px] 600px:w-[135px] 1200px:w-[200px] 1200px:left-[22px]'>
+            {openMore && <MoreModal />}
+        </div>
 
         {openNewPost && <NewPostModal setOpen={setOpenNewPost}/>}
     </div>
