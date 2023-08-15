@@ -1,8 +1,6 @@
 import React, { useEffect } from 'react';
-import logo from "../assets/mern-social-media-high-resolution-logo-color-on-transparent-background.png";
-import { Link } from 'react-router-dom';
 import SignupForm from '../components/UserAuth/SignupForm';
-
+import UserAuthHeader from '../components/UserAuth/UserAuthHeader';
 
 const Signup = () => {
 
@@ -12,9 +10,9 @@ const Signup = () => {
 
     return (
         <div className='normalFlex flex-col w-full h-full min-w-[350px] bg-[white] overflow-scroll'>
-            <div className="my-[30px] mx-auto">
-                <Link to='/'><img className='w-[300px]' src={logo} alt=''/></Link>
-            </div>
+            {/* Logo header */}
+            <UserAuthHeader />
+            {/* Signup Form */}
             <SignupForm />
         </div>
     )

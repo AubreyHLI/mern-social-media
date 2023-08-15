@@ -139,8 +139,10 @@ const PostCard = ({post, isPage, navToProfile=true }) => {
 					<p className={`mt-[2px] mb-[10px] 480px:mt-0 ${isPage ? 'text-[17px]' : 'text-[15px]' }`}>{post?.postText}</p>
 					
 					{ post?.postPicture &&
-					<img src={post?.postPicture?.url} alt='' className={`h-auto max-h-[90%] object-cover rounded-[20px] 
-						${isPage ? 'w-[90%]' : 'w-[80%]'}`}/> }
+					<div className='inline-block overflow-hidden'>
+						<img src={post?.postPicture?.url} alt='' className={`rounded-[20px] border border-gray-100
+						${isPage ? 'w-auto h-auto max-w-[95%] max-h-[900px]' : 'w-auto h-auto max-w-[85%] max-h-[600px]'}`}/> 
+					</div>}
 
 					{ isPage &&
 					<span className="block w-full mt-[20px] mb-[12px] pb-[12px] text-[15px] text-mernLightGray borderBottom">
