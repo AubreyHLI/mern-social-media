@@ -12,9 +12,9 @@ import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import TooltipBox from '../atoms/TooltipBox';
 import LikedBtn from '../atoms/LikedBtn';
 import CollectedBtn from '../atoms/CollectedBtn';
-import AddCommentForm from '../Comment/AddCommentForm';
 import AvatarOrNameBox from '../atoms/AvatarOrNameBox';
 import axios from 'axios';
+import CommentModal from '../Comment/CommentModal';
 
 
 const PostCard = ({post, isPage, navToProfile=true }) => {
@@ -173,10 +173,7 @@ const PostCard = ({post, isPage, navToProfile=true }) => {
 		</div>
 
 		{open && 
-		<AddCommentForm 
-			postId={post._id}
-			setOpen={setOpen} 
-		/>}
+		<CommentModal postId={post._id} setOpen={setOpen} withComments={!isPage} />}
 	</>
 	
 	)

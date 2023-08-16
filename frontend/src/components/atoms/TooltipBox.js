@@ -2,7 +2,7 @@ import React from 'react'
 
 const TooltipBox = ({Icon, iconStyle, stati, tip, handleOnClick, option, statiHover, isActive}) => {
     return (
-        <div onClick={handleOnClick} className={`relative flex items-center cursor-pointer child:transition-all child:ease-in 
+        <div onClick={handleOnClick} className={`select-none relative flex items-center cursor-pointer child:transition-all child:ease-in 
             hover-div-span:visible hover-div-span:transition-visibility hover-div-span:duration-100 hover-div-span:delay-[0.9s]
             ${option ? option : 'hover-div:text-mernBlue hover-div:bg-[#e7f5fe]'} ${statiHover}`} >
 

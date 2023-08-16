@@ -75,12 +75,12 @@ const Tweetbox = ({sendForm, chooseAudience, submitBtnText, placeholder, userAva
     return (
         <div className={`sectionWrapper ${isLoading && 'disabled'} ${optionStyles}`} >
             <div className='section-left'>
-                <Avatar alt='' src={userAvatar} className='avatar !cursor-auto hover:!brightness-100' />
+                <Avatar alt='' src={userAvatar} className='avatar !w-[50px] !h-[50px] !cursor-auto hover:!brightness-100' />
             </div>
             <form ref={formRef} className='section-right'>
                 <div>
                     {/* text */}
-                    <div className='pl-[5px] flex'>
+                    <div className='flex'>
                         <textarea maxLength={wordLimit} required placeholder={placeholder} ref={textareaRef} value={userInput}  onChange={ e => setUserInput(e.target.value)} onKeyUp={handleKeyup}
                             className={`!min-h-[${minH}px] flex-grow break-words text-[18px] font-[400] placeholder:text-[20px] leading-[24px] mt-[10px] mx-[2px] pb-[24px] outline-none border-none resize-none overflow-y-hidden text-mernFont`}
                         />
@@ -116,7 +116,7 @@ const Tweetbox = ({sendForm, chooseAudience, submitBtnText, placeholder, userAva
                         <li className='relative'>
                             <TooltipBox tip='Emoji' Icon={EmojiEmotionsOutlinedIcon} iconStyle='!text-[22px]' isActive={showEmojis} handleOnClick={() => setShowEmojis(!showEmojis)} />
                             { showEmojis && 
-                            <div className='absolute top-[100%] mt-[2px] ml-[-40px] w-fit z-[10] border-2 rounded-[10px]'>
+                            <div className='absolute select-none top-[100%] mt-[2px] ml-[-40px] w-fit z-[10] border-2 rounded-[10px]'>
                                 <Picker data={data} i18n={i18n} searchPosition='none' onEmojiSelect={addEmoji} previewPosition='none' navPosition='top' maxFrequentRows='2' perLine='8'/>
                             </div>}
                         </li>

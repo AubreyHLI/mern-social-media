@@ -68,7 +68,7 @@ const Sidebar = ({active}) => {
         </button>
         
 
-        <div ref={menuRef} className='hidden cursor-pointer 480px:block 480px:relative 480px:mt-auto 480px:mb-8px 600px:w-full 1200px:w-[220px] 1200px:ml-[12px] 1200px:mr-[20px]'>
+        <div ref={menuRef} className='hidden cursor-pointer select-none 480px:block 480px:relative 480px:mt-auto 480px:mb-8px 600px:w-full 1200px:w-[220px] 1200px:ml-[12px] 1200px:mr-[20px]'>
             <div onClick={() => setOpenMore(prev => !prev)} className='w-fit p-[8px] transition-all ease-out rounded-[30px] mb-[2px] hover:bg-mernBgDark 480px:p-[12px] 480px:w-full 600px:px-[16px]'>
                 <div className="flex items-center justify-start gap-[12px] 1200px:gap-[16px]">
                     <MoreHorizIcon className="icon"/>
