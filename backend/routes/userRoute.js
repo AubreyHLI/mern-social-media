@@ -21,10 +21,10 @@ const {
 } = require('../controllers/notificationsController');
 
 // middlewares
-const { upload } = require('../middlewares/multer');
+const { upload, fieldSizeLimitErrorHandler } = require('../middlewares/multer');
 const { verifyToken } = require('../middlewares/auth');
 
-router.post("/register", upload.none(), createUser);
+router.post("/register", upload.none(), fieldSizeLimitErrorHandler, createUser);
 router.post("/login", loginUser);
 router.get("/currentUser", verifyToken, getCurrentUser);
 router.get("/collectedPosts", verifyToken, getCollectedPosts);
@@ -32,7 +32,7 @@ router.get("/notifications", verifyToken, getUserNotifications);
 router.get("/:userId/followings", verifyToken, getUserFollowings);
 router.get("/:userId/followers", verifyToken, getUserFollowers);
 router.get("/:userId/profileInfo", verifyToken, getProfileInfo);
-router.patch("/editProfileInfo", verifyToken, upload.none(), updateUserInfo);
+router.patch("/editProfileInfo", verifyToken, upload.none(), fieldSizeLimitErrorHandler, updateUserInfo);
 router.patch("/followings/:followingId", verifyToken, addOrRemoveFollowing);
 router.patch("/followers/remove/:followerId", verifyToken, removeFollower);
 router.get("/suggestedUsers", verifyToken, generateSuggestedUsers);

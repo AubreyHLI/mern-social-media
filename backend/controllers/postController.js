@@ -15,11 +15,14 @@ const createPost = asyncHandler( async(req, res, next) => {
             postText,
             likes: {},            
         });
+        console.log('create 1')
         if(picture) {
             const cloudinaryResult = await uploadToCloudinary(picture, `posts/${req.user.id}`, 800); 
             newPost.postPicture = cloudinaryResult.image;
+            console.log('create 2')
         }
         await newPost.save();
+        console.log('create 3')
 
         const posts = await Post.find().populate('author').sort({ createdAt: -1 });
         res.status(201).json({

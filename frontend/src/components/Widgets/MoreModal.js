@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext } from 'react'
 import { AppContext } from '../../context/appContext';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';

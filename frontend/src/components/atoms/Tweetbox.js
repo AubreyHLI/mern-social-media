@@ -13,11 +13,10 @@ import i18n from '@emoji-mart/data/i18n/zh.json';
 import TooltipBox from './TooltipBox';
 
 
-const Tweetbox = ({sendForm, chooseAudience, submitBtnText, placeholder, userAvatar, wordLimit, minH=80, optionStyles}, formRef) => {
+const Tweetbox = ({isLoading, setIsLoading, sendForm, chooseAudience, submitBtnText, placeholder, userAvatar, wordLimit, minH=80, optionStyles}, formRef) => {
     const [userInput, setUserInput] = useState("");
     const [selectedFile, setSelectedFile] = useState(null);
     const [showEmojis, setShowEmojis] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
     const filePickerRef = useRef(null);
     const textareaRef = useRef();
 
@@ -63,13 +62,13 @@ const Tweetbox = ({sendForm, chooseAudience, submitBtnText, placeholder, userAva
         filePickerRef.current.value = null;
     }
 
-    const handleSubmit = e => {
-        e.preventDefault();
-        if(isLoading) return;
-        else setIsLoading(true);
+    // const handleSubmit = e => {
+    //     e.preventDefault();
+    //     if(isLoading) return;
+    //     else setIsLoading(true);
 
-        sendForm(userInput.trim(), selectedFile);
-    }
+    //     sendForm(userInput.trim(), selectedFile);
+    // }
 
 
     return (
@@ -121,7 +120,7 @@ const Tweetbox = ({sendForm, chooseAudience, submitBtnText, placeholder, userAva
                             <TooltipBox tip='地点' Icon={LocationOnOutlinedIcon} iconStyle='!text-[22px]' handleOnClick={() => console.log('location')} />
                         </li>
                     </ul>
-                    <button type="submit" onClick={handleSubmit} className={`btn-submit ${!userInput.trim() && !selectedFile ? 'disabled' : null}`}>
+                    <button type="submit" onClick={() => sendForm(userInput.trim(), selectedFile)} className={`btn-submit ${!userInput.trim() && !selectedFile ? 'disabled' : null}`}>
                         { submitBtnText }
                     </button>
                 </div>
