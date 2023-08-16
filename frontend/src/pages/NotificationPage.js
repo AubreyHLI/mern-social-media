@@ -6,7 +6,7 @@ const NotificationPage = () => {
     const {setActive, setIsUser} = useOutletContext();
 
     useEffect(() => {
-        setActive(4);
+        setActive(3);
         window.scrollTo(0,0);
         setIsUser(false);
     }, [])

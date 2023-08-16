@@ -110,9 +110,6 @@ const Tweetbox = ({sendForm, chooseAudience, submitBtnText, placeholder, userAva
                             <TooltipBox tip='图片' Icon={ImageOutlinedIcon} iconStyle='!text-[22px]' handleOnClick={() => filePickerRef.current.click()}/>
                             <input type='file' ref={filePickerRef} onChange={addImg} className='hidden' />
                         </li>
-                        {/* <li>
-                            <TooltipBox tip='GIF' Icon={GifBoxOutlinedIcon} iconStyle='!text-[22px]' handleOnClick={() => console.log('gif')} />
-                        </li> */}
                         <li className='relative'>
                             <TooltipBox tip='Emoji' Icon={EmojiEmotionsOutlinedIcon} iconStyle='!text-[22px]' isActive={showEmojis} handleOnClick={() => setShowEmojis(!showEmojis)} />
                             { showEmojis && 

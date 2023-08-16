@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { AppContext } from '../../context/appContext';
+import { increaseUserNotif } from '../../redux/features/authSlice';
 import logo from '../../assets/mern-social-media-high-resolution-logo-color-on-transparent-background.png';
 import logoSm from '../../assets/logo-sm.png';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
@@ -13,8 +14,7 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import AddIcon from '@mui/icons-material/Add';
 import SidebarOption from '../Sidebar/SidebarOption';
 import NewPostModal from '../Sidebar/NewPostModal';
-import MoreModal from '../Sidebar/MoreModal';
-import { increaseUserNotif } from '../../redux/features/authSlice';
+import MoreMenu from '../Sidebar/MoreMenu';
 
 
 const Sidebar = ({active}) => {
@@ -52,8 +52,8 @@ const Sidebar = ({active}) => {
         <nav className='w-full flex justify-around 480px:flex-col 480px:gap-[2px] 480px:items-center 480px:mt-[20px] 600px:items-start 1200px:w-[220px] 1200px:ml-[12px] 1200px:mr-[20px]'>
             <SidebarOption label='首页' Icon={HomeOutlinedIcon} isActive={active === 1} path='/' />
             <SidebarOption label='探索' Icon={SearchOutlinedIcon} isActive={active === 2} isHidden={true} path='#' />
-            {/* <SidebarOption label='私信' Icon={MailOutlineIcon} isActive={active === 3} isHidden={true} path='#'/> */}
-            <SidebarOption label='通知' Icon={NotificationsNoneIcon} isActive={active === 4} path='/notifications' notif={user?.newNotifCount}/>
+            <SidebarOption label='通知' Icon={NotificationsNoneIcon} isActive={active === 3} path='/notifications' notif={user?.newNotifCount}/>
+            <SidebarOption label='私信' Icon={MailOutlineIcon} isActive={active === 4} isHidden={true} path='#'/>
             <button onClick={() => setOpenNewPost(true)} className='btn-post 480px:!hidden'>
                 <AddIcon />
                 <span className='hidden 600px:block'>发布动态</span>
@@ -79,9 +79,7 @@ const Sidebar = ({active}) => {
             </div>
         </div>
 
-        <div className='absolute bottom-[75px] left-[10px] z-[101] w-[56px] 600px:w-[135px] 1200px:w-[200px] 1200px:left-[22px]'>
-            {openMore && <MoreModal />}
-        </div>
+        {openMore && <MoreMenu />}
 
         {openNewPost && <NewPostModal setOpen={setOpenNewPost}/>}
     </div>
