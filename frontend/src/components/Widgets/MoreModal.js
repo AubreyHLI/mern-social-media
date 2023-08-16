@@ -12,7 +12,7 @@ import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 
 
-const MoreModal = ({setOpen, open}) => {
+const MoreModal = ({setOpen}) => {
     const { socket, resetContext } = useContext(AppContext);
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -25,22 +25,8 @@ const MoreModal = ({setOpen, open}) => {
         navigate('/login');
     }
 
-    useEffect(() => {
-        if(open) {
-            document.body.style.overflow = 'hidden';  // lock the scroll of home page
-        } else {
-            document.body.style.overflow = 'unset';  // unlock the scroll of home page
-        }
-    }, [open]);
-
-
-    
-    if(!open) {
-        return 
-    }
-
     return (
-        <ModalLayout optionStyle='!mt-auto !mb-0 !h-fit !rounded-t-[16px]'>
+        <ModalLayout optionStyle='!mt-auto !mb-0 !h-fit !rounded-t-[16px] '>
             <div className='w-full flex items-center gap-[20px] pt-[10px] pb-[6px]'>
                 <div onClick={() => setOpen(false)} className='w-[34px] h-[34px] rounded-[50%] normalFlex cursor-pointer transition-colors duration-200 ease-out hover:bg-mernBorder'>
                     <CloseIcon fontSize='medium'/>

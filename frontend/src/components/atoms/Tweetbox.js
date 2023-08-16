@@ -82,7 +82,7 @@ const Tweetbox = ({sendForm, chooseAudience, submitBtnText, placeholder, userAva
                     {/* text */}
                     <div className='flex'>
                         <textarea maxLength={wordLimit} required placeholder={placeholder} ref={textareaRef} value={userInput}  onChange={ e => setUserInput(e.target.value)} onKeyUp={handleKeyup}
-                            className={`!min-h-[${minH}px] flex-grow break-words text-[18px] font-[400] placeholder:text-[20px] leading-[24px] mt-[10px] mx-[2px] pb-[24px] outline-none border-none resize-none overflow-y-hidden text-mernFont`}
+                            className={`!min-h-[${minH}px] w-full flex-grow break-words text-[18px] font-[400] placeholder:text-[20px] leading-[24px] mt-[10px] mx-[2px] pb-[24px] outline-none border-none resize-none overflow-y-hidden text-mernFont`}
                         />
                     </div>
 

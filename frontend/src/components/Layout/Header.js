@@ -1,12 +1,19 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import TooltipBox from '../atoms/TooltipBox'
 import MenuIcon from '@mui/icons-material/Menu';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import MoreModal from '../Widgets/MoreModal';
 
 const Header = ({heading, withBackward, subHeading = null, subText='篇内容', children}) => {
     const [openMore, setOpenMore] = useState(false);
+
+    useEffect(() => {
+        if(openMore) {
+            document.body.style.overflow = 'hidden';  // lock the scroll of home page
+        } else {
+            document.body.style.overflow = 'unset';  // unlock the scroll of home page
+        }
+    }, [openMore]);
 
     return (
         <div className={`sticky top-0 w-full z-[100] ${children ? 'h-[95px]' : 'h-[60px]'} bg-[#f6f8f8d9] backdrop-blur-[10px] flex flex-col justify-between  480px:bg-[#ffffffd9]`}>
@@ -26,7 +33,7 @@ const Header = ({heading, withBackward, subHeading = null, subText='篇内容', 
 
                 <div className='ml-auto mr-0 480px:hidden'>
                     <TooltipBox Icon={MenuIcon} option={'hover-div:bg-mernBgDark'} handleOnClick={() => setOpenMore(true)}/>
-                    <MoreModal setOpen={setOpenMore} open={openMore} /> 
+                    {openMore && <MoreModal setOpen={setOpenMore} /> }
                 </div>
             </div>
 
