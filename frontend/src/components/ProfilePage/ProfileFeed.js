@@ -30,11 +30,11 @@ const ProfileFeed = () => {
         console.log('fetch all posts')
         try {
             const response = await axios.get(`post/allPosts`);
-            if(response.data.success) {
-                dispatch( setPosts({ posts: [...response.data.posts] }) )
-            }
+            dispatch( setPosts(
+                { posts: [...response.data.posts] }
+            ) );
         } catch(error) {
-            const errorMsg = error.name === 'AxiosError' ? error.response.data.message : error.message;
+            const errorMsg = axios.isAxiosError(error) ? error.response?.data?.message : error.message;
             toast.error(errorMsg, { toastId: 'fetchPosts-error' });
         }
     }
@@ -42,16 +42,18 @@ const ProfileFeed = () => {
     const getProfileInfo = async () => {
         try {
             const {data} = await axios.get(`user/${profileId}/profileInfo`);
-            if(data.success) {
-                setProfile(data.profile);
-                setIsUser(profileId === user._id);
-                if(profileId === user._id) {
-                    dispatch(setUserFollowers({followers: data.profile.followers}));
-                    dispatch(setUserFollowings({followings: data.profile.followings}));
-                }
+            setProfile(data.profile);
+            setIsUser(profileId === user._id);
+            if(profileId === user._id) {
+                dispatch(setUserFollowers(
+                    {followers: data.profile.followers}
+                ));
+                dispatch(setUserFollowings(
+                    {followings: data.profile.followings}
+                ));
             }
         } catch(error) {
-            const errorMsg = error.name === 'AxiosError' ? error.response.data.message : error.message;
+            const errorMsg = axios.isAxiosError(error) ? error.response?.data?.message : error.message;
             toast.error(errorMsg, { toastId: 'fetchProfile-error' });
         }
     }

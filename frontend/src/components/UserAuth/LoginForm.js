@@ -31,14 +31,14 @@ const LoginForm = () => {
             const loginResponse = await axios.post(`user/login`,
                 validValuesObj
             );
-            if(loginResponse.data.success) {
-                dispatch( setLogin({ token: loginResponse.data.token }) );
-                setIsLoading(false);
-                toast.success('登录成功！', { toastId: 'login-success' });
-                navigate('/');
-            }
+            dispatch( setLogin(
+                { token: loginResponse.data.token }
+            ) );
+            setIsLoading(false);
+            toast.success('登录成功！', { toastId: 'login-success' });
+            navigate('/');
         } catch(error) {
-            const errorMsg = error.name === 'AxiosError' ? error.response.data.message : error.message;
+            const errorMsg = axios.isAxiosError(error) ? error.response?.data?.message : error.message;
             setIsLoading(false);
             toast.error(errorMsg, { toastId: 'login-error' });
         }

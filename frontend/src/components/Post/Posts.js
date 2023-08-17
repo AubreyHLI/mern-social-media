@@ -17,11 +17,11 @@ const Posts = () => {
         console.log('fetch all posts')
         try {
             const response = await axios.get('post/allPosts');
-            if(response.data.success) {
-                dispatch( setPosts({ posts: [...response.data.posts] }) )
-            }
+            dispatch( setPosts(
+                { posts: [...response.data.posts] }
+            ) )
         } catch(error) {
-            const errorMsg = error.name === 'AxiosError' ? error.response.data.message : error.message;
+            const errorMsg = axios.isAxiosError(error) ? error.response?.data?.message : error.message;
             toast.error(errorMsg, { toastId: 'fetchPosts-error' });
         }
     }

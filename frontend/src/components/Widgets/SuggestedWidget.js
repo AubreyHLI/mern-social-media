@@ -14,12 +14,10 @@ const SuggestedWidget = () => {
 	const fetchSuggestedUsers = async () => {
         try {
             const response = await axios.get('user/suggestedUsers');
-            if(response.data.success) {
-				setSuggestedUsers(response.data.suggestedUsers);
-            }
+			setSuggestedUsers(response.data.suggestedUsers);
         } catch(error) {
-            const errorMsg = error.name === 'AxiosError' ? error.response.data.message : error.message;
-            toast.error(errorMsg, { toastId: 'fetchSuggest-error' });
+			const errorMsg = axios.isAxiosError(error) ? error.response?.data?.message : error.message;
+           	toast.error(errorMsg, { toastId: 'fetchSuggest-error' });
         }
 	}
 

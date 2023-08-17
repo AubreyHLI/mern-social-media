@@ -37,11 +37,11 @@ const SinglePost = ({postId}) => {
     const fetchSinglePost = async () => {
         try {
             const response = await axios.get(`post/${postId}`);
-            if(response.data.success) {
-                dispatch( setAPost({ post: response.data.post }) );
-            }
+            dispatch( setAPost(
+                { post: response.data.post }
+            ) );
         } catch(error) {
-            const errorMsg = error.name === 'AxiosError' ? error.response.data.message : error.message;
+            const errorMsg = axios.isAxiosError(error) ? error.response?.data?.message : error.message;
             toast.error(errorMsg, { toastId: 'fetchPost-error' });
 		}
     }
@@ -61,7 +61,7 @@ const SinglePost = ({postId}) => {
             </div>
 
             {/* Comments */}
-            <Comments isPage={true} postId={postId} post={post} setCommentsLoading={setCommentsLoading} commentsLoading={commentsLoading} />
+            <Comments postId={postId} post={post} setCommentsLoading={setCommentsLoading} commentsLoading={commentsLoading} />
         </div>
     )
 }

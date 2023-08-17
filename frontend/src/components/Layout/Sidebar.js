@@ -49,7 +49,7 @@ const Sidebar = ({active}) => {
             <img className='hidden 1200px:block 1200px:px-[10px]' src={logo} alt=''/>
         </Link>
         
-        <nav className='w-full flex justify-around 480px:flex-col 480px:gap-[2px] 480px:items-center 480px:mt-[20px] 600px:items-start 1200px:w-[220px] 1200px:ml-[12px] 1200px:mr-[20px]'>
+        <nav className='w-full flex justify-around px-[10px] 480px:px-0 480px:flex-col 480px:gap-[2px] 480px:items-center 480px:mt-[20px] 600px:items-start 1200px:w-[220px] 1200px:ml-[12px] 1200px:mr-[20px]'>
             <SidebarOption label='首页' Icon={HomeOutlinedIcon} isActive={active === 1} path='/' />
             <SidebarOption label='探索' Icon={SearchOutlinedIcon} isActive={active === 2} isHidden={true} path='#' />
             <SidebarOption label='通知' Icon={NotificationsNoneIcon} isActive={active === 3} path='/notifications' notif={user?.newNotifCount}/>

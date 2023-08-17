@@ -25,13 +25,13 @@ const AuthProtectedRoute = ({children}) => {
     const getCurrentUser = async () => {
         try {
             const response = await axios.get('user/currentUser');
-            if(response.data.success) {
-                dispatch( setUser({ user: response.data.user }) );
-                socket.emit('new-conUser', response.data.user._id);
-            }
+            dispatch( setUser(
+                { user: response.data.user }
+            ) );
+            socket.emit('new-conUser', response.data.user._id);
         } catch(error) {
-            // const errorMsg = error.name === 'AxiosError' ? error.response.data.message : error.message;
-            toast.error(error, { toastId: 'fetchUser-error' });
+            const errorMsg = axios.isAxiosError(error) ? error.response?.data?.message : error.message;
+            toast.error(errorMsg, { toastId: 'collects-error' });
             navigate('/login');
         } finally {
             setIsLoading(false);

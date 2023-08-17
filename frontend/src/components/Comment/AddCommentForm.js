@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import Tweetbox from '../atoms/Tweetbox';
 import axios from 'axios';
 import { calendarFormat } from '../../helpers/dayjsHelper';
@@ -10,6 +10,7 @@ import { toast } from 'react-toastify';
 
 
 const AddCommentForm = ({postId, setOpen, post}) => {
+    const [isLoading, setIsLoading] = useState(false);
     const { socket } = useContext(AppContext);
     const commentFormRef = useRef();
     const user = useSelector(state => state.auth.user);
@@ -26,26 +27,29 @@ const AddCommentForm = ({postId, setOpen, post}) => {
         if(commentImg) formData.append("picture", commentImg);
         try{
             const response = await axios.post(`post/${postId}/createComment`, formData);
-            if(response.data.success) {
-                dispatch( setAPost({ post: response.data.updatedPost }) );
-                socket.emit('send-notification', {
-                    senderId: user._id,
-                    receiverId: post?.author?._id,
-                    type: 'commentPost',
-					targetPost: {
-                        id: post?._id,
-                        text: post?.postText?.slice(0,30),
-                        thumbnail: post?.postPicture?.thumbnail,
-                    },
-                    commentContent: response.data.newComment,
-                });
-                toast.success('评论发表成功', { toastId: 'comment-success' });
-                setOpen(false);
-            }
+            dispatch( setAPost(
+                { post: response.data.updatedPost }
+            ) );
+            socket.emit('send-notification', {
+                senderId: user._id,
+                receiverId: post?.author?._id,
+                type: 'commentPost',
+                targetPost: {
+                    id: post?._id,
+                    text: post?.postText?.slice(0,30),
+                    thumbnail: post?.postPicture?.thumbnail,
+                },
+                commentContent: response.data.newComment,
+            });
+            toast.success('评论发表成功', { toastId: 'comment-success' });
+            setOpen(false);
+
         } catch(error) {
-            const errorMsg = error.name === 'AxiosError' ? error.response.data.message : error.message;
+            const errorMsg = axios.isAxiosError(error) ? error.response?.data?.message : error.message;
             toast.error(errorMsg, { toastId: 'comment-error' });
-        }
+        } finally {
+            setIsLoading(false)
+        }  
     }
 
 
@@ -83,7 +87,7 @@ const AddCommentForm = ({postId, setOpen, post}) => {
 
             {/* make comment */}
             <div className='mt-[-16px]'>
-                <Tweetbox placeholder='发表你的评论！' ref={commentFormRef} userAvatar={user?.imageUrl?.url}
+                <Tweetbox placeholder='发表你的评论！' ref={commentFormRef} userAvatar={user?.imageUrl?.url} isLoading={isLoading} setIsLoading={setIsLoading}
                     sendForm={handleSendComment} chooseAudience={false} submitBtnText='发布评论' minH={100} wordLimit={300}
                 />
             </div>

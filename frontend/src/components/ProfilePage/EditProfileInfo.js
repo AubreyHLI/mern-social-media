@@ -83,15 +83,17 @@ const EditProfileInfo = ({setOpen}) => {
             const response = await axios.patch(`user/editProfileInfo`,
                 newFormData
             );
-            if(response.data.success) {
-                dispatch( setUser({ user: response.data.updatedUser }) );
-                dispatch( setSomePosts({ profile: response.data.updatedUser }) );
-                setIsLoading(false);
-                toast.success('资料更新成功', { toastId: 'editProfile-success' });
-                setOpen(false);
-            }
+            dispatch( setUser(
+                { user: response.data.updatedUser }
+            ) );
+            dispatch( setSomePosts(
+                { profile: response.data.updatedUser }
+            ) );
+            setIsLoading(false);
+            toast.success('资料更新成功', { toastId: 'editProfile-success' });
+            setOpen(false);
         } catch(error) {
-            const errorMsg = error.name === 'AxiosError' ? error.response.data.message : error.message;
+            const errorMsg = axios.isAxiosError(error) ? error.response?.data?.message : error.message;
             setIsLoading(false);
             toast.error(errorMsg, { toastId: 'editProfile-error' });
         }

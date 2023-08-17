@@ -67,14 +67,12 @@ const SignupForm = () => {
                     newFormData.append(value, validValuesObj[value]);
                 }
 
-                const signupResponse = await axios.post(`user/register`, newFormData );
-                if(signupResponse.data.success) {
-                    toast.success('注册成功，请登录', { toastId: 'signup-success' });
-                    setIsLoading(false);
-                    navigate('/login');
-                }
+                await axios.post(`user/register`, newFormData );
+                toast.success('注册成功，请登录', { toastId: 'signup-success' });
+                setIsLoading(false);
+                navigate('/login');
             } catch(error) {
-                const errorMsg = error.name === 'AxiosError' ? error.response.data.message : error.message;
+                const errorMsg = axios.isAxiosError(error) ? error.response?.data?.message : error.message;
                 toast.error(errorMsg, { toastId: 'signup-error' });
                 setIsLoading(false);
             }

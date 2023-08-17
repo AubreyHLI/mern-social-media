@@ -19,18 +19,18 @@ const FollowBtn = ({postUserId, isSmall}) => {
         e.preventDefault();
         try{
             const response = await axios.patch(`user/followings/${postUserId}`);
-            if(response.data.success) {
-                dispatch( setUserFollowings({ followings: [...response.data.followings] }) );
-                if(type === 'follow'){
-                    socket.emit('send-notification', {
-                        senderId: _id,
-                        receiverId: postUserId,
-                        type: type
-                    });
-                }
+            dispatch( setUserFollowings(
+                { followings: [...response.data.followings] }
+            ) );
+            if(type === 'follow'){
+                socket.emit('send-notification', {
+                    senderId: _id,
+                    receiverId: postUserId,
+                    type: type
+                });
             }
         } catch(error) {
-            const errorMsg = error.name === 'AxiosError' ? error.response.data.message : error.message;
+            const errorMsg = axios.isAxiosError(error) ? error.response?.data?.message : error.message;
             toast.error(errorMsg, { toastId: 'follow-error' });
         }
     }

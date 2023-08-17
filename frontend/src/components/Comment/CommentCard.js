@@ -19,15 +19,12 @@ const CommentCard = ({comment, postId, setComments}) => {
 			const answer = window.confirm('确认删除此评论？');
 			if(!answer) return
 			const response = await axios.delete(`post/${postId}/${comment?._id}/delete`);
-			if(response.data.success) {
-				dispatch(setPostComments({
-					comments: response.data.updatedComments,
-					postId
-				}));
-				toast.success('评论已删除', { toastId: 'comment-success' });
-			}
+			dispatch(setPostComments({
+				comments: response.data.updatedComments,
+				postId
+			}));
 		} catch(error) {
-			const errorMsg = error.name === 'AxiosError' ? error.response.data.message : error.message;
+			const errorMsg = axios.isAxiosError(error) ? error.response?.data?.message : error.message;
             toast.error(errorMsg, { toastId: 'comment-error' });
 		}
 	}

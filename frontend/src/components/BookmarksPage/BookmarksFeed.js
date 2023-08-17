@@ -19,12 +19,14 @@ const BookmarksFeed = () => {
     const getCollectedPosts = async () => {
         try {
             const response = await axios.get(`user/collectedPosts`);
-            if(response.data.success) {
-                dispatch( setCollectedPosts({ collectedPosts: response.data.collectedPosts }) );
-                dispatch( setUserCollects({ updatedCollects: response.data.collects }) );
-            }
+            dispatch( setCollectedPosts(
+                { collectedPosts: response.data.collectedPosts }
+            ) );
+            dispatch( setUserCollects(
+                { updatedCollects: response.data.collects }
+            ) );
         } catch(error) {
-            const errorMsg = error.name === 'AxiosError' ? error.response.data.message : error.message;
+            const errorMsg = axios.isAxiosError(error) ? error.response?.data?.message : error.message;
             toast.error(errorMsg, { toastId: 'collects-error' });
         }
     }

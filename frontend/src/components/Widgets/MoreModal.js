@@ -42,13 +42,13 @@ const MoreModal = ({setOpen}) => {
                     <BookmarkBorderIcon className='!text-[26px]'/>
                     <span className='borderBottom h-[60px] w-full flex items-center'>已收藏</span>
                 </div>
-                <div className='h-fit flex items-center gap-[12px] text-[18px] px-[5px] cursor-pointer' onClick={() => console.log('settings')}>
-                    <SettingsIcon className='!text-[26px]'/>
-                    <span className='borderBottom h-[60px] w-full flex items-center'>设置</span>
-                </div>
                 <div className='h-fit flex items-center gap-[12px] text-[18px] px-[5px] cursor-pointer' onClick={handleLogout} >
                     <LogoutIcon className='!text-[26px]'/>
                     <span className='borderBottom h-[60px] w-full flex items-center'>退出登录</span>
+                </div>
+                <div className='h-fit flex items-center gap-[12px] text-[18px] px-[5px] cursor-pointer' onClick={() => console.log('settings')}>
+                    <SettingsIcon className='!text-[26px]'/>
+                    <span className='borderBottom h-[60px] w-full flex items-center'>设置</span>
                 </div>
             </div>
 

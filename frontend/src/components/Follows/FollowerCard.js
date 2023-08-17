@@ -15,12 +15,12 @@ const FollowerCard = ({profile}) => {
         e.preventDefault();
         try{
             const response = await axios.patch(`user/followers/remove/${profile?._id}`);
-            if(response.data.success) {
-                dispatch( setUserFollowers({ followers: [...response.data.followers] }) );
-				setIsRemoved(true)
-            }
+			dispatch( setUserFollowers(
+				{ followers: [...response.data.followers] }
+			) );
+			setIsRemoved(true)
         } catch(error) {
-            const errorMsg = error.name === 'AxiosError' ? error.response.data.message : error.message;
+			const errorMsg = axios.isAxiosError(error) ? error.response?.data?.message : error.message;
             toast.error(errorMsg, { toastId: 'follow-error' });
         }
 	}

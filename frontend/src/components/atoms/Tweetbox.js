@@ -3,7 +3,6 @@ import { Avatar } from '@mui/material';
 import { converBase64 } from '../../helpers/imageUploadHelper';
 import PublicOutlinedIcon from '@mui/icons-material/PublicOutlined';
 import ImageOutlinedIcon from '@mui/icons-material/ImageOutlined';
-import GifBoxOutlinedIcon from '@mui/icons-material/GifBoxOutlined';
 import EmojiEmotionsOutlinedIcon from '@mui/icons-material/EmojiEmotionsOutlined';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import CloseIcon from '@mui/icons-material/Close';
@@ -62,13 +61,11 @@ const Tweetbox = ({isLoading, setIsLoading, sendForm, chooseAudience, submitBtnT
         filePickerRef.current.value = null;
     }
 
-    // const handleSubmit = e => {
-    //     e.preventDefault();
-    //     if(isLoading) return;
-    //     else setIsLoading(true);
-
-    //     sendForm(userInput.trim(), selectedFile);
-    // }
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        setIsLoading(true);
+        sendForm(userInput.trim(), selectedFile);
+    }
 
 
     return (
@@ -80,7 +77,7 @@ const Tweetbox = ({isLoading, setIsLoading, sendForm, chooseAudience, submitBtnT
                 <div>
                     {/* text */}
                     <div className='flex'>
-                        <textarea maxLength={wordLimit} required placeholder={placeholder} ref={textareaRef} value={userInput}  onChange={ e => setUserInput(e.target.value)} onKeyUp={handleKeyup}
+                        <textarea maxLength={wordLimit} placeholder={placeholder} ref={textareaRef} value={userInput}  onChange={ e => setUserInput(e.target.value)} onKeyUp={handleKeyup}
                             className={`!min-h-[${minH}px] w-full flex-grow break-words text-[18px] font-[400] placeholder:text-[20px] leading-[24px] mt-[10px] mx-[2px] pb-[24px] outline-none border-none resize-none overflow-y-hidden text-mernFont`}
                         />
                     </div>
@@ -120,7 +117,7 @@ const Tweetbox = ({isLoading, setIsLoading, sendForm, chooseAudience, submitBtnT
                             <TooltipBox tip='地点' Icon={LocationOnOutlinedIcon} iconStyle='!text-[22px]' handleOnClick={() => console.log('location')} />
                         </li>
                     </ul>
-                    <button type="submit" onClick={() => sendForm(userInput.trim(), selectedFile)} className={`btn-submit ${!userInput.trim() && !selectedFile ? 'disabled' : null}`}>
+                    <button type="submit" onClick={handleSubmit} className={`btn-submit ${!userInput.trim() && !selectedFile ? 'disabled' : null}`}>
                         { submitBtnText }
                     </button>
                 </div>

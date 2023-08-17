@@ -14,12 +14,10 @@ const FollowersList = ({setProfileName}) => {
     const getFollowers = async () => {
         try{
             const response = await axios.get(`user/${profileId}/followers`);
-            if(response.data.success) {
-                setFollowers([...response.data.followers]);
-                setProfileName(response.data.profilename);
-            }
+            setFollowers([...response.data.followers]);
+            setProfileName(response.data.profilename);
         } catch(error) {
-            const errorMsg = error.name === 'AxiosError' ? error.response.data.message : error.message;
+            const errorMsg = axios.isAxiosError(error) ? error.response?.data?.message : error.message;
             toast.error(errorMsg, { toastId: 'fetchFollowers-error' });
         }
     }

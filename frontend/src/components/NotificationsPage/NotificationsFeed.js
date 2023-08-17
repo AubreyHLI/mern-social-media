@@ -30,11 +30,9 @@ const NotificationsFeed = () => {
     const fetchUserNotifications = async () => {
         try {
             const response = await axios.get(`user/notifications`);
-            if(response.data.success) {
-                setNotifications(response.data.categorizedNotifs);
-            }
+            setNotifications(response.data.categorizedNotifs);
         } catch(error) {
-            const errorMsg = error.name === 'AxiosError' ? error.response.data.message : error.message;
+            const errorMsg = axios.isAxiosError(error) ? error.response?.data?.message : error.message;
             toast.error(errorMsg, { toastId: 'fetchNotifs-error' });
         }
     }

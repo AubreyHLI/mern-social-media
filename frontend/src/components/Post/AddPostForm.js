@@ -25,14 +25,14 @@ const AddPostForm = ({ minH=80, optionStyles, autoFocus=false, handleAfterSucces
         if(postImgBase64) formData.append("picture", postImgBase64);
         try{
             const response = await axios.post('post/createPost', formData);
-            if(response.data.success) {
-                dispatch( setPosts({ posts: [...response.data.posts] }) );
-                postFormRef.current.resetPostInput();
-                handleAfterSuccess();
-                toast.success('动态发布成功', { toastId: 'sendPost-success' });
-            }
+            dispatch( setPosts(
+                { posts: [...response.data.posts] }
+            ) );
+            postFormRef.current.resetPostInput();
+            handleAfterSuccess();
+            toast.success('动态发布成功', { toastId: 'sendPost-success' });
         } catch(error) {
-            const errorMsg = error.name === 'AxiosError' ? error.response.data.message : error.message;
+            const errorMsg = axios.isAxiosError(error) ? error.response?.data?.message : error.message;
             toast.error(errorMsg, { toastId: 'sendPost-error' });
         } finally {
             setIsLoading(false)

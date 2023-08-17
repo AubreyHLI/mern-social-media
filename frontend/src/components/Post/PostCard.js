@@ -15,6 +15,7 @@ import CollectedBtn from '../atoms/CollectedBtn';
 import AvatarOrNameBox from '../atoms/AvatarOrNameBox';
 import axios from 'axios';
 import CommentModal from '../Comment/CommentModal';
+import { toast } from 'react-toastify';
 
 
 const PostCard = ({post, isPage, navToProfile=true }) => {
@@ -50,13 +51,16 @@ const PostCard = ({post, isPage, navToProfile=true }) => {
 			const answer = window.confirm('确认删除此内容？');
 			if(!answer) return
 			const response = await axios.delete(`post/${post?._id}/delete`);
-			if(response.data.success) {
-				if(isPage) navigate('/');
-				else dispatch( setPosts({ posts: response.data.posts }) );
+			if(isPage) {
+				navigate('/');
+			} else {
+				dispatch( setPosts(
+					{ posts: response.data.posts }
+				) );
 			}
 		} catch(error) {
-			if(error.name === 'AxiosError') console.log('error:', error.response.data.message);
-            else console.log('error:', error.message);
+			const errorMsg = axios.isAxiosError(error) ? error.response?.data?.message : error.message;
+            toast.error(errorMsg, { toastId: 'delete-error' });
 		}
 	}
 
@@ -64,24 +68,24 @@ const PostCard = ({post, isPage, navToProfile=true }) => {
         e.stopPropagation();  //prevent click event pass to the parent
         try{
             const response = await axios.patch(`post/${post?._id}/like`);
-            if(response.data.success) {
-                dispatch( setAPost({ post: response.data.updatedPost }) );
-				if(type === 'like') {
-					socket.emit('send-notification', {
-						senderId: user._id,
-						receiverId: post?.author?._id,
-						type: 'likePost',
-						targetPost: {
-							id: post?._id,
-							text: post?.postText?.slice(0,30),
-							thumbnail: post?.postPicture?.thumbnail,
-						},
-					});
-				}
-            }
+			dispatch( setAPost(
+				{ post: response.data.updatedPost }
+			) );
+			if(type === 'like') {
+				socket.emit('send-notification', {
+					senderId: user._id,
+					receiverId: post?.author?._id,
+					type: 'likePost',
+					targetPost: {
+						id: post?._id,
+						text: post?.postText?.slice(0,30),
+						thumbnail: post?.postPicture?.thumbnail,
+					},
+				});
+			}
         } catch(error) {
-            if(error.name === 'AxiosError') console.log('error:', error.response.data.message);
-            else console.log('error:', error.message);
+			const errorMsg = axios.isAxiosError(error) ? error.response?.data?.message : error.message;
+            toast.error(errorMsg, { toastId: 'like-error' });
         }
     }
 
@@ -89,12 +93,12 @@ const PostCard = ({post, isPage, navToProfile=true }) => {
         e.stopPropagation();  //prevent click event pass to the parent
         try{
             const response = await axios.patch(`post/${post?._id}/collect`);
-            if(response.data.success) {
-                dispatch( setUserCollects({ updatedCollects: response.data.updatedCollects }) );
-            }
+            dispatch( setUserCollects(
+				{ updatedCollects: response.data.updatedCollects }
+			) );
         } catch(error) {
-            if(error.name === 'AxiosError') console.log('error:', error.response.data.message);
-            else console.log('error:', error.message);
+            const errorMsg = axios.isAxiosError(error) ? error.response?.data?.message : error.message;
+            toast.error(errorMsg, { toastId: 'collect-error' });
         }
     }	
 
