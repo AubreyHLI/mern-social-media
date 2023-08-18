@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppContext } from '../../context/appContext';
 import { setUserFollowings } from '../../redux/features/authSlice';
@@ -9,6 +9,7 @@ import TooltipBox from '../atoms/TooltipBox';
 import { toast } from 'react-toastify';
 
 const FollowBtn = ({postUserId, isSmall}) => {
+    const [isLoading, setIsLoading] = useState(false);
     const { socket } = useContext(AppContext);
     const { _id, followings } = useSelector(state => state.auth.user);
     const hasFollowing = followings.includes(postUserId);
@@ -17,6 +18,7 @@ const FollowBtn = ({postUserId, isSmall}) => {
     const addRemoveFollowing = async (e, type) => {
         e.stopPropagation();  //prevent click event pass to the parent
         e.preventDefault();
+        setIsLoading(true);
         try{
             const response = await axios.patch(`user/followings/${postUserId}`);
             dispatch( setUserFollowings(
@@ -32,13 +34,15 @@ const FollowBtn = ({postUserId, isSmall}) => {
         } catch(error) {
             const errorMsg = axios.isAxiosError(error) ? error.response?.data?.message : error.message;
             toast.error(errorMsg, { toastId: 'follow-error' });
+        } finally {
+            setIsLoading(false);
         }
     }
     
 
     if(isSmall) {
         return (
-            <div>
+            <div className=''>
                 {hasFollowing 
                 ? <TooltipBox tip='取消关注' Icon={PersonRemoveAlt1OutlinedIcon} iconStyle='!text-[20px] !text-mernDarkGray' option='hover-div:bg-[white] hover-div:border'  handleOnClick={(e) => addRemoveFollowing(e, 'unfollow')}/>
                 : <TooltipBox tip='关注' Icon={PersonAddAltIcon} iconStyle='!text-[20px] !text-mernBlue'  handleOnClick={(e) => addRemoveFollowing(e, 'follow')}/>
@@ -51,11 +55,11 @@ const FollowBtn = ({postUserId, isSmall}) => {
     return (
         <div>
             {hasFollowing 
-            ? <button onClick={(e) => addRemoveFollowing(e, 'unfollow')} className='btn-secondary hover:!text-[rgb(244,33,46)] hover:!border-[rgb(253,201,206)] hover:!bg-[rgb(254,239,240)] hover-span:inline hover-div:hidden !text-[14px]'>
+            ? <button onClick={(e) => addRemoveFollowing(e, 'unfollow')} disabled={isLoading} className='btn-secondary hover:!text-[rgb(244,33,46)] hover:!border-[rgb(253,201,206)] hover:!bg-[rgb(254,239,240)] hover-span:inline hover-div:hidden !text-[14px]'>
                 <div>已关注</div>
                 <span className='hidden w-fit'>取消关注</span>
             </button>
-            : <button onClick={(e) => addRemoveFollowing(e, 'follow')} className='btn-secondary !text-[#fff] !bg-mernFont !text-[14px]'>
+            : <button onClick={(e) => addRemoveFollowing(e, 'follow')} disabled={isLoading} className='btn-secondary !text-[#fff] !bg-mernFont !text-[14px]'>
                 关注
             </button>
             }

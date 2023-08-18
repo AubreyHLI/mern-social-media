@@ -8,11 +8,13 @@ import { toast } from 'react-toastify'
 
 const FollowerCard = ({profile}) => {
     const [isRemoved, setIsRemoved] = useState(false);
+	const [isLoading, setIsLoading] = useState(false);
 	const dispatch = useDispatch();
 
 	const removeFollower = async(e) => {
 		e.stopPropagation();  //prevent click event pass to the parent
         e.preventDefault();
+		setIsLoading(true)
         try{
             const response = await axios.patch(`user/followers/remove/${profile?._id}`);
 			dispatch( setUserFollowers(
@@ -22,7 +24,9 @@ const FollowerCard = ({profile}) => {
         } catch(error) {
 			const errorMsg = axios.isAxiosError(error) ? error.response?.data?.message : error.message;
             toast.error(errorMsg, { toastId: 'follow-error' });
-        }
+        } finally {
+			setIsLoading(false);
+		}
 	}
 
 	if(isRemoved) {
@@ -41,7 +45,7 @@ const FollowerCard = ({profile}) => {
 							<AvatarOrNameBox username={profile?.username} userId={profile?._id} />
 							<p className='text-[14px] text-mernLightGray line-clamp-1'>{profile?.bio}</p>
 						</div>
-						<button onClick={(e) => removeFollower(e)} className='btn-secondary hover:text-mernDarkGray w-fit'>
+						<button onClick={(e) => removeFollower(e)} disabled={isLoading} className='btn-secondary hover:text-mernDarkGray w-fit'>
 							移除粉丝
 						</button>
 					</div>
