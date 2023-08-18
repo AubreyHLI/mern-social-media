@@ -13,12 +13,12 @@ export const postsSlice = createSlice({
             state.posts = action.payload.posts;
         },
         setAPost: (state, action) => {
-            if(state.posts.length === 0) {
+            if(state.posts?.length === 0) {
                 state.posts.push(action.payload.post);
             } else {
                 const updatedPosts = state.posts.map(p => {
                     // only update the updated post
-                    if(p._id === action.payload.post._id) {
+                    if(p?._id === action.payload?.post?._id) {
                         return action.payload.post;
                     } else {
                         return p;
@@ -30,7 +30,7 @@ export const postsSlice = createSlice({
         setSomePosts: (state, action) => {
             const updatedPosts = state.posts.map(p => {
                 const { profile } = action.payload;
-                if(p.author._id === profile._id) {
+                if(p?.author?._id === profile?._id) {
                     p.author.username = profile.username;
                     p.author.bio = profile.bio;
                     p.author.imageUrl = profile.imageUrl;
@@ -43,7 +43,7 @@ export const postsSlice = createSlice({
         setSomePostsFollowings: (state, action) => {
             const updatedPosts = state.posts.map(p => {
                 const { profileId, profileFollowings } = action.payload;
-                if(p.author._id === profileId) {
+                if(p?.author?._id === profileId) {
                     p.author.followings = profileFollowings;
                 }
                 return p;
@@ -53,7 +53,7 @@ export const postsSlice = createSlice({
         setSomePostsFollowers: (state, action) => {
             const updatedPosts = state.posts.map(p => {
                 const { profileId, profileFollowers } = action.payload;
-                if(p.author._id === profileId) {
+                if(p?.author?._id === profileId) {
                     p.author.followers = profileFollowers;
                 }
                 return p;
@@ -61,10 +61,10 @@ export const postsSlice = createSlice({
             state.posts = updatedPosts;
         },
         setPostComments: (state, action) => {
-            const updatedPost = state.posts.find(p => p._id === action.payload.postId);
+            const updatedPost = state.posts.find(p => p?._id === action.payload.postId);
             updatedPost.comments = action.payload.comments;
             state.posts.forEach((p, index) => {
-                if(p._id === action.payload.postId) {
+                if(p?._id === action.payload.postId) {
                     state.posts[index] = updatedPost
                 }
             })

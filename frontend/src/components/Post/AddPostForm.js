@@ -18,7 +18,6 @@ const AddPostForm = ({ minH=80, optionStyles, autoFocus=false, handleAfterSucces
     }, [])
 
     const handleSendPost = async (postText, postImgBase64) => {
-        setIsLoading(true);
         const formData = new FormData();
         formData.append("postText", postText);
         formData.append("location", user?.location);

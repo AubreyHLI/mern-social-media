@@ -17,7 +17,7 @@ const ProfileFeed = () => {
     const [profile, setProfile] = useState();
     const user = useSelector(state => state.auth.user);
     const posts = useSelector(state => state.posts.posts);
-	const profilePosts = posts.filter(p => p.author._id === profileId);
+	const profilePosts = posts.filter(p => p?.author?._id === profileId);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -43,8 +43,8 @@ const ProfileFeed = () => {
         try {
             const {data} = await axios.get(`user/${profileId}/profileInfo`);
             setProfile(data.profile);
-            setIsUser(profileId === user._id);
-            if(profileId === user._id) {
+            setIsUser(profileId === user?._id);
+            if(profileId === user?._id) {
                 dispatch(setUserFollowers(
                     {followers: data.profile.followers}
                 ));
