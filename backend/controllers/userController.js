@@ -3,13 +3,13 @@ const jwt = require('jsonwebtoken');
 const User = require("../models/User");
 const asyncHandler = require("../middlewares/asyncHandler");
 const CustomErrorClass = require("../utils/CustomErrorClass");
-const { uploadToCloudinary, removeFromCloudinary } = require("../utils/cloudinary");
+const { removeFromCloudinary, uploadStreamToCloudinary } = require("../utils/cloudinary");
 
 
 // REGISTER
 const createUser = asyncHandler(async (req, res, next) => {
     try {
-        const {username, email, password, location, picture} = req.body;
+        const {username, email, password, location} = req.body;
         const existUser = await User.findOne({ email });
 
         if(existUser) {
@@ -30,9 +30,12 @@ const createUser = asyncHandler(async (req, res, next) => {
             collects: [],
         });
         
-        if(picture) {
-            const cloudinaryResult = await uploadToCloudinary(picture, `avatars/${newUser._id}`, 240); 
-            newUser.imageUrl = cloudinaryResult.image;
+        if(req.file) {
+            let result = await uploadStreamToCloudinary(req.file.buffer, `avatars/${newUser._id}`, 240); 
+            newUser.imageUrl = {
+                url: result.secure_url,
+                public_id: result.public_id,
+            }
         }
         await newUser.save();
         res.status(201).json({
@@ -222,19 +225,25 @@ const updateUserInfo = asyncHandler(async (req, res, next) => {
         user.username = username;
         user.bio = bio;
         user.location = location;
-        if(avatar){
+        if(req.files.avatar){
             if(user.imageUrl && user.imageUrl.public_id) {
                 await removeFromCloudinary(user.imageUrl)
             }
-            const cloudinaryResult = await uploadToCloudinary(avatar, `avatars/${user._id}`, 240);
-            user.imageUrl = cloudinaryResult.image;
+            let result = await uploadStreamToCloudinary(req.files.avatar[0].buffer, `avatars/${user._id}`, 240); 
+            user.imageUrl = {
+                url: result.secure_url,
+                public_id: result.public_id,
+            }
         } 
-        if(cover) {
+        if(req.files.cover){
             if(user.coverImage && user.coverImage.public_id) {
                 await removeFromCloudinary(user.coverImage)
             }
-            const cloudinaryResult = await uploadToCloudinary(cover, `covers/${user._id}`, 800); 
-            user.coverImage = cloudinaryResult.image;
+            let result = await uploadStreamToCloudinary(req.files.cover[0].buffer, `covers/${user._id}`, 800); 
+            user.coverImage = {
+                url: result.secure_url,
+                public_id: result.public_id,
+            }
         } 
         await user.save();
         res.status(200).json({

@@ -2,23 +2,27 @@ const Post = require('../models/Post');
 const Comment = require('../models/Comment');
 const asyncHandler = require("../middlewares/asyncHandler");
 const CustomErrorClass = require("../utils/CustomErrorClass");
-const { uploadToCloudinary, removeFromCloudinary } = require("../utils/cloudinary");
+const { removeFromCloudinary, uploadStreamToCloudinary, getCloundinaryThumbnail } = require("../utils/cloudinary");
 
 
 // Comments
 const createComment = asyncHandler( async(req, res, next) => {
     try {
         const { postId } = req.params;
-        const { commentText, picture } = req.body;
+        const { commentText } = req.body;
 
         const newComment = new Comment({
             author: Object(req.user.id),
             postId,
             commentText,
         });
-        if(picture) {
-            const cloudinaryResult = await uploadToCloudinary(picture, `comments/${postId}`, 400); 
-            newComment.commentPicture = cloudinaryResult.image;
+        if(req.file) {
+            let result = await uploadStreamToCloudinary(req.file.buffer, `comments/${postId}`, 400); 
+            newComment.commentPicture = {
+                url: result.secure_url,
+                public_id: result.public_id,
+                thumbnail: getCloundinaryThumbnail(result.secure_url)
+            }
         }
         await newComment.save();
 

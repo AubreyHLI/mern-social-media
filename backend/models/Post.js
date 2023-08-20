@@ -13,10 +13,6 @@ const PostSchema = new Schema({
         public_id: String,
         thumbnail: String,
     },
-    postPictureThumbnail: {
-        url: String,
-        public_id: String,
-    },
     likes: {
         type: Map,
         of: Boolean,

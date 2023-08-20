@@ -2,27 +2,29 @@ const Post = require('../models/Post');
 const User = require('../models/User');
 const asyncHandler = require("../middlewares/asyncHandler");
 const CustomErrorClass = require("../utils/CustomErrorClass");
-const { uploadToCloudinary, removeFromCloudinary } = require("../utils/cloudinary");
+const { removeFromCloudinary, uploadStreamToCloudinary, getCloundinaryThumbnail } = require("../utils/cloudinary");
 
 
 // CREATE
 const createPost = asyncHandler( async(req, res, next) => {
     try {
-        const { postText, location, picture } = req.body;     
+        const { postText, location } = req.body;     
         const newPost = new Post({
             author: req.user.id,
             location,
             postText,
             likes: {},            
         });
-        console.log('create 1')
-        if(picture) {
-            const cloudinaryResult = await uploadToCloudinary(picture, `posts/${req.user.id}`, 800); 
-            newPost.postPicture = cloudinaryResult.image;
-            console.log('create 2')
+
+        if(req.file) {
+            let result = await uploadStreamToCloudinary(req.file.buffer, `posts/${req.user.id}`, 800);
+            newPost.postPicture = {
+                url: result.secure_url,
+                public_id: result.public_id,
+                thumbnail: getCloundinaryThumbnail(result.secure_url)
+            }
         }
         await newPost.save();
-        console.log('create 3')
 
         const posts = await Post.find().populate('author').sort({ createdAt: -1 });
         res.status(201).json({

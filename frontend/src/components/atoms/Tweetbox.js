@@ -52,8 +52,7 @@ const Tweetbox = ({isLoading, setIsLoading, sendForm, chooseAudience, submitBtnT
     
     const addImg = async (e) => {
         const file = e.target.files[0];
-        const base64 = await converBase64(file);
-        setSelectedFile(base64);
+        setSelectedFile(file);
     }
 
     const removeImg = () => {
@@ -86,7 +85,7 @@ const Tweetbox = ({isLoading, setIsLoading, sendForm, chooseAudience, submitBtnT
                     { selectedFile && 
                     <div className='relative'>
                         <div onClick={removeImg} className='btn-close'><CloseIcon fontSize='sm' /></div>
-                        <img src={selectedFile ? selectedFile : ''} alt="" className='rounded-[20px] max-h-[80px] object-contain'/>
+                        <img src={selectedFile ? URL.createObjectURL(selectedFile) : ''}  alt="" className='rounded-[20px] max-h-[80px] object-contain'/>
                     </div> }
                     
                     {/* private or public */}

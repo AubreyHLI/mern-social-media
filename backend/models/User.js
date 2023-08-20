@@ -24,7 +24,6 @@ const UserSchema = new Schema({
     imageUrl: {
         url: String,
         public_id: String,
-        thumbnail: String,
     },
     bio: {
         type: String,
@@ -34,7 +33,6 @@ const UserSchema = new Schema({
     coverImage: {
         url: String,
         public_id: String,
-        thumbnail: String,
     },
     followings: [ {
         type: mongoose.Types.ObjectId,

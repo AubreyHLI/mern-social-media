@@ -7,7 +7,7 @@ import AddIcon from '@mui/icons-material/Add';
 import Input from '../atoms/Input';
 import LoadingSpinner from '../atoms/LoadingSpinner';
 import axios from 'axios';
-import { converBase64 } from '../../helpers/imageUploadHelper';
+
 
 const registerSchema = yup.object().shape({
     picture: yup.string().required("请上传头像图片"),
@@ -31,8 +31,7 @@ const SignupForm = () => {
 
     const addUserImage = async (e) => {
         const file = e.target.files[0];
-        const base64 = await converBase64(file);
-        setAvatar(base64);
+        setAvatar(file);
     }
 
     const clickUploadPicture = e => {
@@ -64,7 +63,8 @@ const SignupForm = () => {
                 });
                 const newFormData = new FormData();
                 for(let value in validValuesObj) {
-                    newFormData.append(value, validValuesObj[value]);
+                    if(value === 'picture') newFormData.append(value, avatar);
+                    else newFormData.append(value, validValuesObj[value]);
                 }
 
                 await axios.post(`user/register`, newFormData );
@@ -84,7 +84,7 @@ const SignupForm = () => {
             <h1 className="text-[24px] my-[16px]">注册新账号</h1>
             <form className='flex flex-col gap-[4px] 600px:flex-row 600px:gap-[30px]'>
                 <div className='flex items-end 600px:flex-col my-[12px] gap-[12px]'>
-                    <Avatar alt='' src={avatar ? avatar : ''} sx={{ width: 100, height: 100 }} className='border-2'/>
+                    <Avatar alt='' src={avatar ? URL.createObjectURL(avatar) : ''} sx={{ width: 100, height: 100 }} className='border-2'/>
                     <input type='file' name='picture' ref={filePickerRef} onChange={addUserImage} className='hidden'/>
                     <button onClick={clickUploadPicture} className="normalFlex rounded-[8px] py-[6px] pl-[8px] pr-[10px] text-white text-[14px] bg-emerald-500">
                         <AddIcon fontSize='medium'/>上传头像
