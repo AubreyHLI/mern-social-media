@@ -61,7 +61,7 @@ const NotificationCard = ({notification }) => {
                     </div>
 
                     {(image || content) &&
-                    <div className='w-[50px] h-[50px] border border-mernBorder px-[3px] py-[2px] text-mernLightGray ml-[16px]'>
+                    <div className='w-[50px] h-[50px] border border-mernBorder px-[3px] py-[2px] text-mernLightGray ml-[16px] overflow-hidden'>
                         {image ? <img src={image} alt='' className='w-[45px] object-cover'/> 
                         : <p className='line-clamp-3 text-[10px] '>{content}</p>}
                     </div>
